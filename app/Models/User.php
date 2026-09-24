@@ -72,14 +72,54 @@ class User extends Authenticatable
 
     public function getAvatarEmoji(): string
     {
+        if (empty($this->avatar)) {
+            return '🤖';
+        }
+
+        // If avatar is already stored directly as an emoji, return it
+        if (mb_strlen($this->avatar, 'UTF-8') <= 4) {
+            return $this->avatar;
+        }
+
         return match ($this->avatar) {
             'robot' => '🤖',
             'astronaut' => '🚀',
+            'brain' => '🧠',
             'scientist' => '🔬',
             'coder' => '💻',
             'ninja' => '🥷',
             'gamer' => '🎮',
+            'cat' => '🐱',
+            'fox' => '🦊',
+            'bolt' => '⚡',
+            'artist' => '🎨',
+            'star' => '🌟',
+            'cyborg' => '🦾',
+            'owl' => '🦉',
+            'dino' => '🦖',
+            'wizard' => '🧙‍♂️',
             default => '🤖',
         };
+    }
+
+    public static function getAvailableAvatars(): array
+    {
+        return [
+            ['emoji' => '🤖', 'name' => 'Robot'],
+            ['emoji' => '🚀', 'name' => 'Cohete'],
+            ['emoji' => '🧠', 'name' => 'Cerebro'],
+            ['emoji' => '🐱', 'name' => 'Gato Hacker'],
+            ['emoji' => '🦊', 'name' => 'Zorro'],
+            ['emoji' => '⚡', 'name' => 'Rayo Tech'],
+            ['emoji' => '🎨', 'name' => 'Artista Digital'],
+            ['emoji' => '🔬', 'name' => 'Científico'],
+            ['emoji' => '👾', 'name' => 'Arcade Gamer'],
+            ['emoji' => '🌟', 'name' => 'Estrella'],
+            ['emoji' => '🦾', 'name' => 'Ciborg'],
+            ['emoji' => '💻', 'name' => 'Ingeniero'],
+            ['emoji' => '🦉', 'name' => 'Búho Sabio'],
+            ['emoji' => '🦖', 'name' => 'Dino Bot'],
+            ['emoji' => '🧙‍♂️', 'name' => 'Mago Digital'],
+        ];
     }
 }

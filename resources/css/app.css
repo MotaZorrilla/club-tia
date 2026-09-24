@@ -4,8 +4,85 @@
 @source '../../storage/framework/views/*.php';
 @source '../**/*.blade.php';
 @source '../**/*.js';
+@source '../**/*.jsx';
+@source '../**/*.ts';
+@source '../**/*.tsx';
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
+    --font-display: 'Fredoka', cursive, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+
+    --color-tia-purple: #8b5cf6;
+    --color-tia-purple-dark: #6d28d9;
+    --color-tia-cyan: #06b6d4;
+    --color-tia-cyan-dark: #0891b2;
+    --color-tia-yellow: #fbbf24;
+    --color-tia-yellow-dark: #d97706;
+    --color-tia-emerald: #10b981;
+    --color-tia-emerald-dark: #059669;
+    --color-tia-rose: #f43f5e;
+    --color-tia-rose-dark: #e11d48;
+}
+
+.font-display {
+    font-family: 'Fredoka', cursive, sans-serif;
+}
+
+/* 3D Tactile Arcade Buttons */
+.btn-arcade {
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    user-select: none;
+}
+.btn-arcade:active {
+    transform: translateY(4px);
+}
+
+.btn-arcade-purple {
+    background-color: #8b5cf6;
+    box-shadow: 0 5px 0 #5b21b6;
+}
+.btn-arcade-purple:active {
+    box-shadow: 0 1px 0 #5b21b6;
+}
+
+.btn-arcade-cyan {
+    background-color: #06b6d4;
+    box-shadow: 0 5px 0 #0e7490;
+}
+.btn-arcade-cyan:active {
+    box-shadow: 0 1px 0 #0e7490;
+}
+
+.btn-arcade-emerald {
+    background-color: #10b981;
+    box-shadow: 0 5px 0 #047857;
+}
+.btn-arcade-emerald:active {
+    box-shadow: 0 1px 0 #047857;
+}
+
+.btn-arcade-amber {
+    background-color: #f59e0b;
+    box-shadow: 0 5px 0 #b45309;
+}
+.btn-arcade-amber:active {
+    box-shadow: 0 1px 0 #b45309;
+}
+
+.btn-arcade-rose {
+    background-color: #f43f5e;
+    box-shadow: 0 5px 0 #be123c;
+}
+.btn-arcade-rose:active {
+    box-shadow: 0 1px 0 #be123c;
+}
+
+@keyframes floatSlow {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+}
+.animate-float {
+    animation: floatSlow 3.5s ease-in-out infinite;
 }

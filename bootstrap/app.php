@@ -17,6 +17,9 @@ return Application::configure(basePath: dirname(__DIR__))
             'mision/*/completar',
             'usuarios/*',
         ]);
+        $middleware->web(append: [
+            \App\Http\Middleware\HandleInertiaRequests::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

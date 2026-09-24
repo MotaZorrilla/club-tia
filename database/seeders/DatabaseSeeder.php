@@ -17,57 +17,66 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // 1. Usuarios Iniciales (Facilitador, Coordinadora, Estudiantes)
-        $facilitador = User::create([
-            'name' => 'Ing. Héctor Mota Zorrilla',
-            'email' => 'hector@motazorrilla.com',
-            'password' => Hash::make('carmelo2026'),
-            'role' => 'facilitador',
-            'grade' => 'Docente / Mentor Técnico',
-            'avatar' => 'coder',
-            'xp_points' => 2500,
-            'level' => 10,
-            'badges' => ['fundador_tia', 'mentor_estrella', 'maestro_algoritmo', 'live_host'],
-        ]);
+        $facilitador = User::updateOrCreate(
+            ['email' => 'hector@motazorrilla.com'],
+            [
+                'name' => 'Ing. Héctor Mota Zorrilla',
+                'password' => Hash::make('carmelo2026'),
+                'role' => 'facilitador',
+                'grade' => 'Docente / Mentor Técnico',
+                'avatar' => 'coder',
+                'xp_points' => 2500,
+                'level' => 10,
+                'badges' => ['fundador_tia', 'mentor_estrella', 'maestro_algoritmo', 'live_host'],
+            ]
+        );
 
-        $coordinadora = User::create([
-            'name' => 'Prof. Milagros',
-            'email' => 'milagros@montecarmelo.edu.ve',
-            'password' => Hash::make('carmelo2026'),
-            'role' => 'colaborador',
-            'grade' => 'Coordinación Académica',
-            'avatar' => 'scientist',
-            'xp_points' => 1200,
-            'level' => 5,
-            'badges' => ['lider_academico', 'pionera_educativa'],
-        ]);
+        $coordinadora = User::updateOrCreate(
+            ['email' => 'milagros@montecarmelo.edu.ve'],
+            [
+                'name' => 'Prof. Milagros',
+                'password' => Hash::make('carmelo2026'),
+                'role' => 'colaborador',
+                'grade' => 'Coordinación Académica',
+                'avatar' => 'scientist',
+                'xp_points' => 1200,
+                'level' => 5,
+                'badges' => ['lider_academico', 'pionera_educativa'],
+            ]
+        );
 
-        $estudiante1 = User::create([
-            'name' => 'Sofía Carmelo',
-            'email' => 'sofia@montecarmelo.edu.ve',
-            'password' => Hash::make('carmelo2026'),
-            'role' => 'alumno',
-            'grade' => '5° Grado Primaria',
-            'avatar' => 'robot',
-            'xp_points' => 350,
-            'level' => 2,
-            'badges' => ['primera_mision', 'votante_activo'],
-        ]);
+        $estudiante1 = User::updateOrCreate(
+            ['email' => 'sofia@montecarmelo.edu.ve'],
+            [
+                'name' => 'Sofía Carmelo',
+                'password' => Hash::make('carmelo2026'),
+                'role' => 'alumno',
+                'grade' => '5° Grado Primaria',
+                'avatar' => 'robot',
+                'xp_points' => 350,
+                'level' => 2,
+                'badges' => ['primera_mision', 'votante_activo'],
+            ]
+        );
 
-        $estudiante2 = User::create([
-            'name' => 'Mateo Guayana',
-            'email' => 'mateo@montecarmelo.edu.ve',
-            'password' => Hash::make('carmelo2026'),
-            'role' => 'alumno',
-            'grade' => '2° Año Media General',
-            'avatar' => 'astronaut',
-            'xp_points' => 480,
-            'level' => 3,
-            'badges' => ['primera_mision', 'curioso_digital'],
-        ]);
+        $estudiante2 = User::updateOrCreate(
+            ['email' => 'mateo@montecarmelo.edu.ve'],
+            [
+                'name' => 'Mateo Guayana',
+                'password' => Hash::make('carmelo2026'),
+                'role' => 'alumno',
+                'grade' => '1° Año Bachillerato',
+                'avatar' => 'astronaut',
+                'xp_points' => 420,
+                'level' => 2,
+                'badges' => ['primera_mision', 'explorador_canguro'],
+            ]
+        );
 
         // 2. Las 5 Islas en el orden exacto solicitado por el usuario
-        // Isla 1: El Despegue de la IA (Activa)
-        ClassLesson::create([
+        if (ClassLesson::count() === 0) {
+            // Isla 1: El Despegue de la IA (Activa)
+            ClassLesson::create([
             'island_number' => 1,
             'slug' => 'el-despegue-de-la-ia',
             'title' => 'Misión 01: El Despegue de la IA',
@@ -179,45 +188,64 @@ class DatabaseSeeder extends Seeder
             'description' => 'Enseña a tu computadora a ver el mundo. Captura fotos con la cámara web del laboratorio, entrena una red neuronal convolucional en 30 segundos y clasifica materiales de reciclaje.',
             'content' => [],
         ]);
+        }
 
         // 3. Encuesta en Vivo Lista para la Clase Demostrativa
-        $poll = Poll::create([
-            'question' => '¿Para qué te gustaría usar la Inteligencia Artificial en el Colegio Monte Carmelo?',
-            'category' => 'Clase Demostrativa',
-            'is_active' => true,
-            'options' => [
-                [
-                    'id' => 'opt_1',
-                    'text' => 'Tutor Personal de Estudio (explicar temas paso a paso)',
-                    'emoji' => '🧠',
-                    'color' => '#8b5cf6', // Morado tech
+        $poll = Poll::first();
+        if (!$poll) {
+            $poll = Poll::create([
+                'question' => '¿Para qué te gustaría usar la Inteligencia Artificial en el Colegio Monte Carmelo?',
+                'category' => 'Clase Demostrativa',
+                'is_active' => true,
+                'options' => [
+                    [
+                        'id' => 'opt_1',
+                        'text' => 'Tutor Personal de Estudio (explicar temas paso a paso)',
+                        'emoji' => '🧠',
+                        'color' => '#8b5cf6', // Morado tech
+                    ],
+                    [
+                        'id' => 'opt_2',
+                        'text' => 'Crear Videojuegos y Páginas Web propias',
+                        'emoji' => '🎮',
+                        'color' => '#06b6d4', // Cyan
+                    ],
+                    [
+                        'id' => 'opt_3',
+                        'text' => 'Entrenar para la Olimpiada Canguro Matemático',
+                        'emoji' => '🏆',
+                        'color' => '#f59e0b', // Ámbar
+                    ],
+                    [
+                        'id' => 'opt_4',
+                        'text' => 'Clasificar Reciclaje y Ciencias con Cámara Web',
+                        'emoji' => '♻️',
+                        'color' => '#10b981', // Esmeralda
+                    ],
                 ],
-                [
-                    'id' => 'opt_2',
-                    'text' => 'Crear Videojuegos y Páginas Web propias',
-                    'emoji' => '🎮',
-                    'color' => '#06b6d4', // Cyan
-                ],
-                [
-                    'id' => 'opt_3',
-                    'text' => 'Entrenar para la Olimpiada Canguro Matemático',
-                    'emoji' => '🏆',
-                    'color' => '#f59e0b', // Ámbar
-                ],
-                [
-                    'id' => 'opt_4',
-                    'text' => 'Clasificar Reciclaje y Ciencias con Cámara Web',
-                    'emoji' => '♻️',
-                    'color' => '#10b981', // Esmeralda
-                ],
-            ],
-        ]);
+            ]);
 
-        // Votos iniciales para que la gráfica tenga datos vivos al primer render
-        PollVote::create(['poll_id' => $poll->id, 'option_id' => 'opt_1', 'voter_name' => 'Sofia C.', 'ip_address' => '127.0.0.1']);
-        PollVote::create(['poll_id' => $poll->id, 'option_id' => 'opt_1', 'voter_name' => 'Prof. Milagros', 'ip_address' => '127.0.0.1']);
-        PollVote::create(['poll_id' => $poll->id, 'option_id' => 'opt_2', 'voter_name' => 'Mateo G.', 'ip_address' => '127.0.0.1']);
-        PollVote::create(['poll_id' => $poll->id, 'option_id' => 'opt_3', 'voter_name' => 'Equipo Canguro', 'ip_address' => '127.0.0.1']);
-        PollVote::create(['poll_id' => $poll->id, 'option_id' => 'opt_4', 'voter_name' => 'Eco-Brigada', 'ip_address' => '127.0.0.1']);
+            // Votos iniciales para que la gráfica tenga datos vivos al primer render
+            PollVote::create(['poll_id' => $poll->id, 'option_id' => 'opt_1', 'voter_name' => 'Sofia C.', 'ip_address' => '127.0.0.1']);
+            PollVote::create(['poll_id' => $poll->id, 'option_id' => 'opt_1', 'voter_name' => 'Prof. Milagros', 'ip_address' => '127.0.0.1']);
+            PollVote::create(['poll_id' => $poll->id, 'option_id' => 'opt_2', 'voter_name' => 'Mateo G.', 'ip_address' => '127.0.0.1']);
+            PollVote::create(['poll_id' => $poll->id, 'option_id' => 'opt_3', 'voter_name' => 'Equipo Canguro', 'ip_address' => '127.0.0.1']);
+            PollVote::create(['poll_id' => $poll->id, 'option_id' => 'opt_4', 'voter_name' => 'Eco-Brigada', 'ip_address' => '127.0.0.1']);
+        }
+
+        // 4. Configuración Institucional del Club T.I.A. (Misión, Visión, Valores)
+        \App\Models\ClubSetting::set('mision', 'Acercar la tecnología de la información y la inteligencia artificial a los estudiantes del Colegio Monte Carmelo, transformándolos de consumidores pasivos a creadores de software, entrenadores de algoritmos y pensadores críticos con ética digital.', $facilitador->id);
+        
+        \App\Models\ClubSetting::set('vision', 'Consolidar al Club T.I.A. como el living lab escolar de referencia en pensamiento computacional e inteligencia artificial de Ciudad Guayana, integrando ConTech, modelos de lenguaje (NotebookLM) y desarrollo web bajo un modelo de presupuesto US$ 0 en equipamiento.', $facilitador->id);
+
+        \App\Models\ClubSetting::set('bienvenida', '¡Bienvenidos al Club T.I.A. de la U. E. Colegio Monte Carmelo! Dejamos de ser consumidores pasivos de pantallas para convertirnos en creadores de software, entrenadores de algoritmos y pensadores críticos.', $facilitador->id);
+
+        \App\Models\ClubSetting::set('valores', json_encode([
+            'Democratización Tecnológica (Presupuesto Base US$ 0)',
+            'Pensamiento Computacional y Lógica Deductiva',
+            'Ética en Inteligencia Artificial y Cero Alucinaciones',
+            'Curiosidad Científica y Aprendizaje Activo (Ciclo ERCA)',
+            'Trabajo Colaborativo y Liderazgo Estudiantil'
+        ]), $facilitador->id);
     }
 }

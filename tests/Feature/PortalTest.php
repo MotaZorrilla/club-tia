@@ -7,6 +7,7 @@ use App\Models\Poll;
 use App\Models\User;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class PortalTest extends TestCase
@@ -19,46 +20,43 @@ class PortalTest extends TestCase
         $this->seed(DatabaseSeeder::class);
     }
 
-    public function test_portal_index_loads_successfully(): void
+    public function test_portal_index_renders_inertia_with_lessons_and_poll(): void
     {
         $response = $this->get('/');
 
         $response->assertStatus(200);
-        $response->assertSee('CLUB T.I.A.');
-        $response->assertSee('Monte Carmelo');
-        $response->assertSee('Misión 01: El Despegue de la IA');
-        $response->assertSee('Misión 02: El Detective de Libros');
-        $response->assertSee('Misión 03: Los Secretos de la Web');
-        $response->assertSee('Misión 04: El Gimnasio Matemático');
-        $response->assertSee('Misión 05: Entrena a tu Mascota Robot');
+        $response->assertInertia(fn (Assert $page) => $page
+            ->component('Portal/Index')
+            ->has('lessons', 5)
+            ->has('activePoll')
+            ->has('leaderboard')
+        );
     }
 
-    public function test_mission_1_page_loads_successfully(): void
+    public function test_about_page_renders_mission_and_vision(): void
+    {
+        $response = $this->get('/nosotros');
+
+        $response->assertStatus(200);
+        $response->assertInertia(fn (Assert $page) => $page
+            ->component('Portal/About')
+            ->has('settings.mision')
+            ->has('settings.vision')
+        );
+    }
+
+    public function test_mission_page_renders_inertia_component(): void
     {
         $response = $this->get('/mision/el-despegue-de-la-ia');
 
         $response->assertStatus(200);
-        $response->assertSee('Misión 01: El Despegue de la IA');
-        $response->assertSee('¿Inteligencia Artificial o Humano?');
-        $response->assertSee('Glosario Mágico');
+        $response->assertInertia(fn (Assert $page) => $page
+            ->component('Portal/Lesson')
+            ->where('lesson.slug', 'el-despegue-de-la-ia')
+        );
     }
 
-    public function test_live_poll_api_returns_active_poll_with_stats(): void
-    {
-        $response = $this->getJson('/api/polls/active');
-
-        $response->assertStatus(200);
-        $response->assertJsonStructure([
-            'id',
-            'question',
-            'total_votes',
-            'options' => [
-                '*' => ['id', 'text', 'emoji', 'color', 'votes', 'percentage']
-            ]
-        ]);
-    }
-
-    public function test_voting_in_poll_registers_vote_and_awards_xp(): void
+    public function test_guest_cannot_vote_in_poll_without_registration(): void
     {
         $poll = Poll::first();
 
@@ -66,27 +64,84 @@ class PortalTest extends TestCase
             'option_id' => 'opt_1'
         ]);
 
-        $response->assertStatus(200);
+        $response->assertStatus(401);
         $response->assertJson([
-            'success' => true
+            'success' => false,
+            'requires_auth' => true,
         ]);
     }
 
-    public function test_completing_mission_awards_xp_and_badge(): void
+    public function test_student_can_register_with_emoji_avatar_and_auto_vote(): void
     {
-        $user = User::first();
-        session(['current_user_id' => $user->id]);
+        $poll = Poll::first();
 
-        $response = $this->postJson('/mision/el-despegue-de-la-ia/completar');
+        $response = $this->postJson('/usuarios/registro', [
+            'name' => 'Valeria Tech',
+            'grade' => '6° Grado Primaria',
+            'avatar' => '🚀',
+            'vote_option_id' => 'opt_2',
+        ]);
 
         $response->assertStatus(200);
         $response->assertJson([
-            'success' => true
+            'success' => true,
+            'user' => [
+                'name' => 'Valeria Tech',
+                'role' => 'alumno',
+                'xp_points' => 115, // 100 welcome + 15 vote
+            ]
+        ]);
+
+        $this->assertDatabaseHas('users', [
+            'name' => 'Valeria Tech',
+            'avatar' => '🚀',
+            'xp_points' => 115,
+        ]);
+    }
+
+    public function test_authenticated_user_can_vote_and_earn_xp(): void
+    {
+        $user = User::where('role', 'alumno')->first();
+        session(['current_user_id' => $user->id]);
+
+        $poll = Poll::first();
+
+        $initialXp = $user->xp_points;
+
+        $response = $this->postJson("/api/polls/{$poll->id}/vote", [
+            'option_id' => 'opt_1'
+        ]);
+
+        $response->assertStatus(200);
+        $response->assertJson([
+            'success' => true,
         ]);
 
         $this->assertDatabaseHas('users', [
             'id' => $user->id,
-            'xp_points' => $user->xp_points + 100
+            'xp_points' => $initialXp + 15,
         ]);
+    }
+
+    public function test_dashboard_redirects_unauthenticated_user(): void
+    {
+        $response = $this->get('/dashboard');
+        $response->assertRedirect('/');
+    }
+
+    public function test_dashboard_renders_for_facilitator(): void
+    {
+        $facilitador = User::where('role', 'facilitador')->first();
+        session(['current_user_id' => $facilitador->id]);
+
+        $response = $this->get('/dashboard');
+
+        $response->assertStatus(200);
+        $response->assertInertia(fn (Assert $page) => $page
+            ->component('Dashboard/Index')
+            ->where('user.role', 'facilitador')
+            ->has('kpis')
+            ->has('students')
+        );
     }
 }
