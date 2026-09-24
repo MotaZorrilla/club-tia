@@ -15,19 +15,6 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         session(['current_user_id' => $user->id]);
 
-        if ($request->wantsJson() || $request->ajax()) {
-            return response()->json([
-                'success' => true,
-                'message' => "Has ingresado como {$user->name} ({$user->role})",
-                'user' => [
-                    'id' => $user->id,
-                    'name' => $user->name,
-                    'role' => $user->role,
-                    'avatar_emoji' => $user->getAvatarEmoji(),
-                ]
-            ]);
-        }
-
         return redirect()->route('dashboard')->with('success', "Bienvenido de vuelta, {$user->name} ({$user->role})");
     }
 

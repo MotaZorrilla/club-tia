@@ -2,13 +2,13 @@
   "name": "Club T.I.A. · Colegio Monte Carmelo",
   "short_name": "Club T.I.A.",
   "description": "Portal Educativo del Club de Tecnologías de la Información e Inteligencia Artificial",
-  "start_url": "/",
+  "start_url": "/club-tia/",
   "display": "standalone",
   "background_color": "#0f172a",
   "theme_color": "#8b5cf6",
   "icons": [
     {
-      "src": "/favicon.svg",
+      "src": "/club-tia/favicon.svg",
       "sizes": "any",
       "type": "image/svg+xml"
     }
