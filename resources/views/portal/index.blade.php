@@ -37,10 +37,6 @@
             <div class="pt-4 flex flex-wrap gap-4 text-xs font-mono text-slate-500 dark:text-slate-400 border-t border-slate-200 dark:border-slate-800">
                 <span class="flex items-center gap-1.5"><strong class="text-purple-600 dark:text-purple-400 font-bold">5</strong> Islas de Aventura</span>
                 <span>·</span>
-                <span class="flex items-center gap-1.5"><strong class="text-cyan-600 dark:text-cyan-400 font-bold">0$</strong> Costo en Hardware</span>
-                <span>·</span>
-                <span class="flex items-center gap-1.5"><strong class="text-emerald-600 dark:text-emerald-400 font-bold">100%</strong> Software Libre</span>
-                <span>·</span>
                 <span class="flex items-center gap-1.5"><strong class="text-amber-600 dark:text-amber-400 font-bold">3:00 a 5:30 PM</strong> Bloque Vespertino</span>
             </div>
         </div>

@@ -33,9 +33,9 @@ class PortalController extends Controller
 
         $communityStats = [
             'total_explorers' => User::where('role', 'alumno')->count(),
-            'completed_missions' => 42,
-            'badges_awarded' => 87,
-            'active_islands' => 5,
+            'completed_missions' => User::where('role', 'alumno')->get()->sum(fn($u) => count(array_filter($u->badges ?? [], fn($b) => str_starts_with($b, 'badge_mision_')))),
+            'badges_awarded' => User::get()->sum(fn($u) => count($u->badges ?? [])),
+            'active_islands' => ClassLesson::count(),
         ];
 
         return Inertia::render('Portal/Index', [
@@ -59,7 +59,7 @@ class PortalController extends Controller
 
         $settings = [
             'mision' => ClubSetting::get('mision', 'Acercar la tecnología de la información y la inteligencia artificial a los estudiantes del Colegio Monte Carmelo, transformándolos de consumidores pasivos a creadores de software, entrenadores de algoritmos y pensadores críticos con ética digital.'),
-            'vision' => ClubSetting::get('vision', 'Consolidar al Club T.I.A. como el living lab escolar de referencia en pensamiento computacional e inteligencia artificial de Ciudad Guayana, integrando ConTech, modelos de lenguaje (NotebookLM) y desarrollo web bajo un modelo de presupuesto US$ 0 en equipamiento.'),
+            'vision' => ClubSetting::get('vision', 'Consolidar al Club T.I.A. como el living lab escolar de referencia en pensamiento computacional e inteligencia artificial de Ciudad Guayana, integrando ConTech, modelos de lenguaje (NotebookLM) y desarrollo web de vanguardia.'),
             'bienvenida' => ClubSetting::get('bienvenida', '¡Bienvenidos al Club T.I.A. de la U. E. Colegio Monte Carmelo! Dejamos de ser consumidores pasivos de pantallas para convertirnos en creadores de software.'),
             'valores' => json_decode(ClubSetting::get('valores', '[]'), true),
         ];

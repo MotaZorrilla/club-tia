@@ -59,7 +59,7 @@ export default function Navbar({ onOpenRegister }: NavbarProps) {
                                 </span>
                             </div>
                             <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 hidden sm:block">
-                                Tecnologías de la Información & Inteligencia Artificial
+                                Tecnologías de la Información e Inteligencia Artificial
                             </p>
                         </div>
                     </Link>
@@ -148,16 +148,20 @@ export default function Navbar({ onOpenRegister }: NavbarProps) {
                     ) : (
                         /* Unauthenticated / Guest View */
                         <div className="flex items-center gap-2">
-                            <span className="hidden sm:inline-flex text-xs font-semibold text-slate-500 dark:text-slate-400 px-2 py-1 rounded-xl bg-slate-100 dark:bg-slate-800">
-                                👤 Invitado
-                            </span>
+                            <Link
+                                href="/dashboard"
+                                className="btn-arcade btn-arcade-purple px-4 py-2 rounded-2xl text-white font-bold font-display text-xs sm:text-sm flex items-center gap-1.5 shadow-md"
+                            >
+                                <LayoutDashboard size={16} />
+                                <span>Entrar al Dashboard</span>
+                            </Link>
                             <button
                                 type="button"
                                 onClick={onOpenRegister}
-                                className="btn-arcade btn-arcade-cyan px-4 py-2 rounded-2xl text-white font-bold font-display text-xs sm:text-sm flex items-center gap-1.5 shadow-md"
+                                className="hidden sm:inline-flex btn-arcade btn-arcade-cyan px-3.5 py-2 rounded-2xl text-white font-bold font-display text-xs sm:text-sm items-center gap-1.5 shadow-sm"
                             >
-                                <UserPlus size={16} />
-                                <span>Registrarme / Entrar</span>
+                                <UserPlus size={15} />
+                                <span>Registrarme</span>
                             </button>
                         </div>
                     )}

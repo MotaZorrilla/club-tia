@@ -54,7 +54,7 @@ export default function Index({ lessons, activePoll, communityStats, leaderboard
                         </h1>
 
                         <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 max-w-2xl font-normal leading-relaxed">
-                            Bienvenido al <strong className="text-purple-600 dark:text-purple-400">Club T.I.A.</strong> (Tecnologías de la Información & Inteligencia Artificial). Desarrolla videojuegos, entrena modelos de visión computacional y potencia tu pensamiento crítico con costo US$ 0 en equipamiento.
+                            Bienvenido al <strong className="text-purple-600 dark:text-purple-400">Club T.I.A.</strong> (Tecnologías de la Información e Inteligencia Artificial). Desarrolla videojuegos, entrena modelos de visión computacional y potencia tu pensamiento crítico.
                         </p>
 
                         {/* Action Buttons */}

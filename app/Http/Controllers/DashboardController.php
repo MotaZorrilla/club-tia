@@ -18,7 +18,22 @@ class DashboardController extends Controller
         $user = $userId ? User::find($userId) : null;
 
         if (!$user) {
-            return redirect('/')->with('info', 'Por favor regístrate o identifícate para ver tu Dashboard escolar.');
+            $registeredUsers = User::orderByDesc('xp_points')->get()->map(function ($u) {
+                return [
+                    'id' => $u->id,
+                    'name' => $u->name,
+                    'role' => $u->role,
+                    'grade' => $u->grade,
+                    'avatar_emoji' => $u->getAvatarEmoji(),
+                    'xp_points' => $u->xp_points,
+                    'level' => $u->level,
+                    'rank' => $u->rank,
+                ];
+            });
+
+            return Inertia::render('Dashboard/Login', [
+                'users' => $registeredUsers,
+            ]);
         }
 
         $allUsers = User::orderByDesc('xp_points')->get()->map(function ($u) {

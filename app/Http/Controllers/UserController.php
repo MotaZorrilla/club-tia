@@ -10,12 +10,25 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    public function switchUser($id)
+    public function switchUser(Request $request, $id)
     {
         $user = User::findOrFail($id);
         session(['current_user_id' => $user->id]);
 
-        return back()->with('info', "Sesión cambiada a: {$user->name} ({$user->role})");
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => "Has ingresado como {$user->name} ({$user->role})",
+                'user' => [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'role' => $user->role,
+                    'avatar_emoji' => $user->getAvatarEmoji(),
+                ]
+            ]);
+        }
+
+        return redirect('/dashboard')->with('success', "Bienvenido de vuelta, {$user->name} ({$user->role})");
     }
 
     public function logout(Request $request)

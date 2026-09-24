@@ -241,10 +241,10 @@ export default function About({ settings: initialSettings, isFacilitador }: Abou
                         <div className="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700">
                             <span className="text-2xl">🛡️</span>
                             <h4 className="font-display font-bold text-base text-slate-900 dark:text-white mt-2">
-                                Presupuesto Base US$ 0
+                                6. Pensamiento Crítico & Ética
                             </h4>
                             <p className="text-xs text-slate-600 dark:text-slate-300 mt-1">
-                                Máximo aprovechamiento del equipamiento escolar existente sin costos adicionales.
+                                Formación en ciudadanía digital, verificación rigurosa de fuentes y uso responsable de la IA.
                             </p>
                         </div>
                     </div>

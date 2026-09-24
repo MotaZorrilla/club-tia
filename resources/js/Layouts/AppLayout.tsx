@@ -87,8 +87,6 @@ export default function AppLayout({ children }: AppLayoutProps) {
                             Misión & Visión
                         </Link>
                         <span>·</span>
-                        <span>Filosofía de Presupuesto Base US$ 0</span>
-                        <span>·</span>
                         <span className="flex items-center gap-1">
                             Hecho con <Heart size={12} className="text-rose-500 fill-rose-500" /> por el Ing. Héctor Mota
                         </span>
