@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
                 'password' => Hash::make('carmelo2026'),
                 'role' => 'facilitador',
                 'grade' => 'Docente / Mentor Técnico',
+                'specialty' => 'Innovación Tecnológica & Robótica Educativa',
                 'avatar' => '💻',
                 'xp_points' => 2500,
                 'level' => 10,
@@ -38,6 +39,7 @@ class DatabaseSeeder extends Seeder
                 'password' => Hash::make('carmelo2026'),
                 'role' => 'colaborador',
                 'grade' => 'Coordinación Académica',
+                'specialty' => 'Ciencias & Plan Lector',
                 'avatar' => '🔬',
                 'xp_points' => 1200,
                 'level' => 5,
@@ -47,16 +49,16 @@ class DatabaseSeeder extends Seeder
 
         // Estudiantes del Colegio Monte Carmelo con datos reales de semillero
         $sampleStudents = [
-            ['name' => 'Sofía Carmelo', 'email' => 'sofia@montecarmelo.edu.ve', 'grade' => '5° Grado Primaria', 'avatar' => '🤖', 'xp' => 450, 'level' => 2, 'badges' => ['bienvenida_tia', 'votante_activo', 'badge_mision_1']],
-            ['name' => 'Mateo Guayana', 'email' => 'mateo@montecarmelo.edu.ve', 'grade' => '1° Año Media General', 'avatar' => '🚀', 'xp' => 520, 'level' => 3, 'badges' => ['bienvenida_tia', 'explorador_canguro', 'badge_mision_1']],
-            ['name' => 'Valeria Silva', 'email' => 'valeria@montecarmelo.edu.ve', 'grade' => '6° Grado Primaria', 'avatar' => '🧠', 'xp' => 380, 'level' => 2, 'badges' => ['bienvenida_tia', 'votante_activo']],
-            ['name' => 'Lucas Mendoza', 'email' => 'lucas@montecarmelo.edu.ve', 'grade' => '4° Grado Primaria', 'avatar' => '🐱', 'xp' => 280, 'level' => 2, 'badges' => ['bienvenida_tia', 'curioso_digital']],
-            ['name' => 'Camila Rivas', 'email' => 'camila@montecarmelo.edu.ve', 'grade' => '2° Año Media General', 'avatar' => '🦊', 'xp' => 610, 'level' => 3, 'badges' => ['bienvenida_tia', 'badge_mision_1', 'votante_activo']],
-            ['name' => 'Andrés Caroní', 'email' => 'andres@montecarmelo.edu.ve', 'grade' => '3° Año Media General', 'avatar' => '⚡', 'xp' => 740, 'level' => 3, 'badges' => ['bienvenida_tia', 'maestro_algoritmo', 'badge_mision_1']],
-            ['name' => 'Isabella Bolívar', 'email' => 'isabella@montecarmelo.edu.ve', 'grade' => '5° Grado Primaria', 'avatar' => '🎨', 'xp' => 320, 'level' => 2, 'badges' => ['bienvenida_tia', 'votante_activo']],
-            ['name' => 'Diego Orinoco', 'email' => 'diego@montecarmelo.edu.ve', 'grade' => '1° Año Media General', 'avatar' => '👾', 'xp' => 490, 'level' => 2, 'badges' => ['bienvenida_tia', 'badge_mision_1']],
-            ['name' => 'Mariana Torres', 'email' => 'mariana@montecarmelo.edu.ve', 'grade' => '4° Año Media General', 'avatar' => '🌟', 'xp' => 850, 'level' => 4, 'badges' => ['bienvenida_tia', 'lider_estudiantil', 'badge_mision_1', 'votante_activo']],
-            ['name' => 'Gabriel Castillo', 'email' => 'gabriel@montecarmelo.edu.ve', 'grade' => '5° Año Media General', 'avatar' => '🦾', 'xp' => 920, 'level' => 4, 'badges' => ['bienvenida_tia', 'pionero_ia', 'badge_mision_1']],
+            ['name' => 'Sofía Carmelo', 'email' => 'sofia@montecarmelo.edu.ve', 'grade' => '5° Grado Primaria', 'section' => 'A', 'avatar' => '🤖', 'xp' => 450, 'level' => 2, 'badges' => ['bienvenida_tia', 'votante_activo', 'badge_mision_1']],
+            ['name' => 'Mateo Guayana', 'email' => 'mateo@montecarmelo.edu.ve', 'grade' => '1° Año Media General', 'section' => 'B', 'avatar' => '🚀', 'xp' => 520, 'level' => 3, 'badges' => ['bienvenida_tia', 'explorador_canguro', 'badge_mision_1']],
+            ['name' => 'Valeria Silva', 'email' => 'valeria@montecarmelo.edu.ve', 'grade' => '6° Grado Primaria', 'section' => 'A', 'avatar' => '🧠', 'xp' => 380, 'level' => 2, 'badges' => ['bienvenida_tia', 'votante_activo']],
+            ['name' => 'Lucas Mendoza', 'email' => 'lucas@montecarmelo.edu.ve', 'grade' => '4° Grado Primaria', 'section' => 'C', 'avatar' => '🐱', 'xp' => 280, 'level' => 2, 'badges' => ['bienvenida_tia', 'curioso_digital']],
+            ['name' => 'Camila Rivas', 'email' => 'camila@montecarmelo.edu.ve', 'grade' => '2° Año Media General', 'section' => 'A', 'avatar' => '🦊', 'xp' => 610, 'level' => 3, 'badges' => ['bienvenida_tia', 'badge_mision_1', 'votante_activo']],
+            ['name' => 'Andrés Caroní', 'email' => 'andres@montecarmelo.edu.ve', 'grade' => '3° Año Media General', 'section' => 'B', 'avatar' => '⚡', 'xp' => 740, 'level' => 3, 'badges' => ['bienvenida_tia', 'maestro_algoritmo', 'badge_mision_1']],
+            ['name' => 'Isabella Bolívar', 'email' => 'isabella@montecarmelo.edu.ve', 'grade' => '5° Grado Primaria', 'section' => 'B', 'avatar' => '🎨', 'xp' => 320, 'level' => 2, 'badges' => ['bienvenida_tia', 'votante_activo']],
+            ['name' => 'Diego Orinoco', 'email' => 'diego@montecarmelo.edu.ve', 'grade' => '1° Año Media General', 'section' => 'A', 'avatar' => '👾', 'xp' => 490, 'level' => 2, 'badges' => ['bienvenida_tia', 'badge_mision_1']],
+            ['name' => 'Mariana Torres', 'email' => 'mariana@montecarmelo.edu.ve', 'grade' => '4° Año Media General', 'section' => 'A', 'avatar' => '🌟', 'xp' => 850, 'level' => 4, 'badges' => ['bienvenida_tia', 'lider_estudiantil', 'badge_mision_1', 'votante_activo']],
+            ['name' => 'Gabriel Castillo', 'email' => 'gabriel@montecarmelo.edu.ve', 'grade' => '5° Año Media General', 'section' => 'Única', 'avatar' => '🦾', 'xp' => 920, 'level' => 4, 'badges' => ['bienvenida_tia', 'pionero_ia', 'badge_mision_1']],
         ];
 
         foreach ($sampleStudents as $st) {
@@ -67,6 +69,7 @@ class DatabaseSeeder extends Seeder
                     'password' => Hash::make('carmelo2026'),
                     'role' => 'alumno',
                     'grade' => $st['grade'],
+                    'section' => $st['section'],
                     'avatar' => $st['avatar'],
                     'xp_points' => $st['xp'],
                     'level' => $st['level'],

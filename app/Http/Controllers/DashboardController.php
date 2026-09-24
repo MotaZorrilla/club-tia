@@ -8,6 +8,7 @@ use App\Models\Poll;
 use App\Models\PollVote;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
 
 class DashboardController extends Controller
@@ -24,6 +25,8 @@ class DashboardController extends Controller
                     'name' => $u->name,
                     'role' => $u->role,
                     'grade' => $u->grade,
+                    'section' => $u->section,
+                    'specialty' => $u->specialty,
                     'avatar_emoji' => $u->getAvatarEmoji(),
                     'xp_points' => $u->xp_points,
                     'level' => $u->level,
@@ -43,6 +46,8 @@ class DashboardController extends Controller
                 'email' => $u->email,
                 'role' => $u->role,
                 'grade' => $u->grade,
+                'section' => $u->section,
+                'specialty' => $u->specialty,
                 'avatar' => $u->avatar,
                 'avatar_emoji' => $u->getAvatarEmoji(),
                 'xp_points' => $u->xp_points,
@@ -79,6 +84,8 @@ class DashboardController extends Controller
                 'email' => $user->email,
                 'role' => $user->role,
                 'grade' => $user->grade,
+                'section' => $user->section,
+                'specialty' => $user->specialty,
                 'avatar' => $user->avatar,
                 'avatar_emoji' => $user->getAvatarEmoji(),
                 'xp_points' => $user->xp_points,
@@ -163,5 +170,69 @@ class DashboardController extends Controller
             'new_xp' => $student->xp_points,
             'new_level' => $student->level,
         ]);
+    }
+
+    public function updateUser(Request $request, $id)
+    {
+        $currentUserId = session('current_user_id');
+        $currentUser = $currentUserId ? User::find($currentUserId) : null;
+
+        if (!$currentUser || $currentUser->role !== 'facilitador') {
+            return response()->json(['error' => 'Solo el Facilitador puede modificar los perfiles y méritos del Club.'], 403);
+        }
+
+        $request->validate([
+            'name' => 'required|string|max:100',
+            'role' => 'required|string|in:alumno,colaborador,facilitador',
+            'grade' => 'nullable|string|max:50',
+            'section' => 'nullable|string|max:20',
+            'specialty' => 'nullable|string|max:100',
+            'avatar' => 'required|string',
+            'xp_points' => 'required|integer|min:0',
+            'password' => 'nullable|string|min:4',
+        ]);
+
+        $targetUser = User::findOrFail($id);
+        $targetUser->name = trim($request->name);
+        $targetUser->role = $request->role;
+        $targetUser->grade = $request->grade;
+        $targetUser->section = $request->section;
+        $targetUser->specialty = $request->specialty;
+        $targetUser->avatar = $request->avatar;
+        $targetUser->xp_points = (int) $request->xp_points;
+        $targetUser->level = max(1, floor($targetUser->xp_points / 250) + 1);
+
+        if ($request->filled('password')) {
+            $targetUser->password = Hash::make($request->password);
+        }
+
+        $targetUser->save();
+
+        $userData = [
+            'id' => $targetUser->id,
+            'name' => $targetUser->name,
+            'email' => $targetUser->email,
+            'role' => $targetUser->role,
+            'grade' => $targetUser->grade,
+            'section' => $targetUser->section,
+            'specialty' => $targetUser->specialty,
+            'avatar' => $targetUser->avatar,
+            'avatar_emoji' => $targetUser->getAvatarEmoji(),
+            'xp_points' => $targetUser->xp_points,
+            'level' => $targetUser->level,
+            'rank' => $targetUser->rank,
+            'badges' => $targetUser->badges ?? [],
+            'created_at' => $targetUser->created_at->format('d/m/Y'),
+        ];
+
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => "¡Perfil de {$targetUser->name} actualizado con éxito!",
+                'user' => $userData,
+            ]);
+        }
+
+        return redirect()->back()->with('success', "¡Perfil de {$targetUser->name} actualizado con éxito!");
     }
 }

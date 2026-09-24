@@ -4,6 +4,8 @@ export interface User {
     email: string;
     role: 'alumno' | 'colaborador' | 'facilitador';
     grade?: string;
+    section?: string;
+    specialty?: string;
     avatar: string;
     avatar_emoji: string;
     xp_points: number;

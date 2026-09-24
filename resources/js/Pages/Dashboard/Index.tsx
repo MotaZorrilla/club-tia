@@ -18,6 +18,8 @@ import {
     BookOpen,
     Sparkles,
     Check,
+    Lock,
+    X,
 } from 'lucide-react';
 import { appUrl } from '../../lib/route';
 
@@ -55,6 +57,19 @@ export default function DashboardIndex({ user: initialUser, kpis, students: init
     const [awardAmount, setAwardAmount] = useState(25);
     const [awardReason, setAwardReason] = useState('Participación destacada en clase');
     const [awarding, setAwarding] = useState(false);
+
+    // Edit User Modal (Facilitator)
+    const [editingUser, setEditingUser] = useState<User | null>(null);
+    const [editName, setEditName] = useState('');
+    const [editRole, setEditRole] = useState<'alumno' | 'colaborador' | 'facilitador'>('alumno');
+    const [editGrade, setEditGrade] = useState('');
+    const [editSection, setEditSection] = useState('');
+    const [editSpecialty, setEditSpecialty] = useState('');
+    const [editXp, setEditXp] = useState(100);
+    const [editAvatar, setEditAvatar] = useState('🤖');
+    const [editPassword, setEditPassword] = useState('');
+    const [savingUser, setSavingUser] = useState(false);
+    const [editError, setEditError] = useState<string | null>(null);
 
     // Poll Question Editor
     const [pollQuestion, setPollQuestion] = useState(activePoll?.question || '');
@@ -204,6 +219,68 @@ export default function DashboardIndex({ user: initialUser, kpis, students: init
             alert('Error al otorgar XP');
         } finally {
             setAwarding(false);
+        }
+    };
+
+    const openEditUserModal = (target: User) => {
+        setEditingUser(target);
+        setEditName(target.name);
+        setEditRole(target.role as any);
+        setEditGrade(target.grade || '5° Grado Primaria');
+        setEditSection(target.section || 'A');
+        setEditSpecialty(target.specialty || '');
+        setEditXp(target.xp_points);
+        setEditAvatar(target.avatar || '🤖');
+        setEditPassword('');
+        setEditError(null);
+    };
+
+    const handleSaveUser = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!editingUser) return;
+
+        setSavingUser(true);
+        setEditError(null);
+
+        try {
+            const csrfToken = (document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement)?.content || '';
+            const res = await fetch(appUrl(`/dashboard/usuarios/${editingUser.id}/actualizar`), {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                },
+                body: JSON.stringify({
+                    name: editName.trim(),
+                    role: editRole,
+                    grade: editGrade,
+                    section: editRole === 'colaborador' ? null : editSection,
+                    specialty: editRole === 'colaborador' ? editSpecialty.trim() : null,
+                    avatar: editAvatar,
+                    xp_points: editXp,
+                    password: editPassword || undefined,
+                }),
+            });
+
+            const data = await res.json();
+            if (res.ok && data.success) {
+                setStudents(prev => prev.map(s => s.id === editingUser.id ? { ...s, ...data.user } : s));
+                if (user.id === editingUser.id) {
+                    setUser(prev => ({ ...prev, ...data.user }));
+                }
+                setEditingUser(null);
+                showNotice(data.message || '¡Usuario actualizado con éxito!');
+                try {
+                    confetti({ particleCount: 40, spread: 50 });
+                } catch (err) {}
+            } else {
+                setEditError(data.message || data.error || 'Error al guardar los cambios.');
+            }
+        } catch (err) {
+            setEditError('Error de conexión con el servidor escolar.');
+        } finally {
+            setSavingUser(false);
         }
     };
 
@@ -462,11 +539,11 @@ export default function DashboardIndex({ user: initialUser, kpis, students: init
                                     <table className="w-full text-left text-xs">
                                         <thead>
                                             <tr className="border-b border-slate-200 dark:border-slate-700 text-slate-400 uppercase font-bold">
-                                                <th className="pb-3">Explorador</th>
-                                                <th className="pb-3">Grado</th>
+                                                <th className="pb-3">Explorador / Miembro</th>
+                                                <th className="pb-3">Grado / Sección</th>
                                                 <th className="pb-3">Nivel / Rango</th>
                                                 <th className="pb-3">XP Total</th>
-                                                <th className="pb-3 text-right">Acción</th>
+                                                <th className="pb-3 text-right">Acciones</th>
                                             </tr>
                                         </thead>
                                         <tbody className="divide-y divide-slate-100 dark:divide-slate-700/60 font-medium">
@@ -484,7 +561,22 @@ export default function DashboardIndex({ user: initialUser, kpis, students: init
                                                         </div>
                                                     </td>
                                                     <td className="py-3 text-slate-600 dark:text-slate-300">
-                                                        {st.grade || '—'}
+                                                        <div className="font-semibold text-slate-900 dark:text-slate-200">
+                                                            {st.role === 'colaborador' ? (
+                                                                <span className="text-amber-600 dark:text-amber-400 font-bold">Docente</span>
+                                                            ) : st.role === 'facilitador' ? (
+                                                                <span className="text-purple-600 dark:text-purple-400 font-bold">Facilitador</span>
+                                                            ) : (
+                                                                st.grade || '—'
+                                                            )}
+                                                        </div>
+                                                        <div className="text-[10px] text-slate-400 font-normal">
+                                                            {st.role === 'colaborador'
+                                                                ? (st.specialty || 'General')
+                                                                : st.role === 'facilitador'
+                                                                ? (st.specialty || 'Mentor Técnico')
+                                                                : (st.section ? `Sección "${st.section}"` : 'Sec. —')}
+                                                        </div>
                                                     </td>
                                                     <td className="py-3">
                                                         <span className="font-bold text-amber-500">Nv.{st.level}</span> · {st.rank}
@@ -492,11 +584,20 @@ export default function DashboardIndex({ user: initialUser, kpis, students: init
                                                     <td className="py-3 font-bold font-display text-purple-600 dark:text-purple-400">
                                                         {st.xp_points} XP
                                                     </td>
-                                                    <td className="py-3 text-right">
+                                                    <td className="py-3 text-right space-x-1.5 whitespace-nowrap">
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => openEditUserModal(st)}
+                                                            className="btn-arcade btn-arcade-cyan px-2.5 py-1 rounded-xl text-[11px] font-bold text-white shadow-sm inline-flex items-center gap-1"
+                                                            title="Editar datos, sección, puntuación o clave"
+                                                        >
+                                                            <Edit3 size={12} />
+                                                            <span>Editar</span>
+                                                        </button>
                                                         <button
                                                             type="button"
                                                             onClick={() => setAwardModalStudent(st)}
-                                                            className="btn-arcade btn-arcade-emerald px-3 py-1 rounded-xl text-[11px] font-bold text-white shadow-sm inline-flex items-center gap-1"
+                                                            className="btn-arcade btn-arcade-emerald px-2.5 py-1 rounded-xl text-[11px] font-bold text-white shadow-sm inline-flex items-center gap-1"
                                                         >
                                                             <PlusCircle size={12} />
                                                             <span>+XP Mérito</span>
@@ -626,7 +727,7 @@ export default function DashboardIndex({ user: initialUser, kpis, students: init
                                     <thead>
                                         <tr className="border-b border-slate-200 dark:border-slate-700 text-slate-400 uppercase font-bold">
                                             <th className="pb-3">Estudiante</th>
-                                            <th className="pb-3">Grado</th>
+                                            <th className="pb-3">Grado / Sección</th>
                                             <th className="pb-3">XP</th>
                                             <th className="pb-3 text-right">Mérito</th>
                                         </tr>
@@ -641,7 +742,8 @@ export default function DashboardIndex({ user: initialUser, kpis, students: init
                                                     </span>
                                                 </td>
                                                 <td className="py-3 text-slate-600 dark:text-slate-300">
-                                                    {st.grade}
+                                                    <div className="font-semibold">{st.grade || '—'}</div>
+                                                    {st.section && <div className="text-[10px] text-slate-400">Sección "{st.section}"</div>}
                                                 </td>
                                                 <td className="py-3 font-bold text-purple-600 dark:text-purple-400">
                                                     {st.xp_points} XP
@@ -726,6 +828,195 @@ export default function DashboardIndex({ user: initialUser, kpis, students: init
                                         className="btn-arcade btn-arcade-emerald px-5 py-2 rounded-xl text-xs font-bold text-white shadow-md"
                                     >
                                         {awarding ? 'Otorgando...' : 'Confirmar Mérito ⭐'}
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                )}
+
+                {/* EDIT USER MODAL (FACILITADOR ONLY) */}
+                {editingUser && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/75 backdrop-blur-sm animate-fadeIn">
+                        <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-7 max-w-lg w-full border-2 border-purple-500/30 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+                            <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-12 h-12 rounded-2xl bg-purple-500/10 text-purple-600 dark:text-purple-400 flex items-center justify-center text-3xl shadow-inner">
+                                        {editAvatar}
+                                    </div>
+                                    <div>
+                                        <h3 className="font-display font-bold text-lg text-slate-900 dark:text-white flex items-center gap-2">
+                                            <span>Editar Perfil & Calificación</span>
+                                        </h3>
+                                        <span className="text-xs text-slate-400">
+                                            {editingUser.email}
+                                        </span>
+                                    </div>
+                                </div>
+                                <button
+                                    type="button"
+                                    onClick={() => setEditingUser(null)}
+                                    className="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-full"
+                                    aria-label="Cerrar modal"
+                                >
+                                    <X size={18} />
+                                </button>
+                            </div>
+
+                            {editError && (
+                                <div className="p-3 text-xs rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-600 dark:text-rose-400 font-medium">
+                                    {editError}
+                                </div>
+                            )}
+
+                            <form onSubmit={handleSaveUser} className="space-y-4 text-xs">
+                                {/* Nombre */}
+                                <div>
+                                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">
+                                        Nombre Completo / Alias
+                                    </label>
+                                    <input
+                                        type="text"
+                                        required
+                                        value={editName}
+                                        onChange={(e) => setEditName(e.target.value)}
+                                        className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white font-medium focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                                    />
+                                </div>
+
+                                {/* Rol, Grado, Sección */}
+                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                                    <div>
+                                        <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">
+                                            Rol
+                                        </label>
+                                        <select
+                                            value={editRole}
+                                            onChange={(e) => setEditRole(e.target.value as any)}
+                                            className="w-full px-2 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white font-medium focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                                        >
+                                            <option value="alumno">Alumno</option>
+                                            <option value="colaborador">Docente</option>
+                                            <option value="facilitador">Facilitador</option>
+                                        </select>
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">
+                                            Grado / Año
+                                        </label>
+                                        <select
+                                            value={editGrade}
+                                            onChange={(e) => setEditGrade(e.target.value)}
+                                            className="w-full px-2 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white font-medium focus:ring-2 focus:ring-purple-500 focus:outline-none text-[11px]"
+                                        >
+                                            <option value="4° Grado Primaria">4° Grado Primaria</option>
+                                            <option value="5° Grado Primaria">5° Grado Primaria</option>
+                                            <option value="6° Grado Primaria">6° Grado Primaria</option>
+                                            <option value="1° Año Media General">1° Año Media</option>
+                                            <option value="2° Año Media General">2° Año Media</option>
+                                            <option value="3° Año Media General">3° Año Media</option>
+                                            <option value="4° Año Media General">4° Año Media</option>
+                                            <option value="5° Año Media General">5° Año Media</option>
+                                            <option value="Docente / Mentor Técnico">Docente / Mentor</option>
+                                            <option value="Coordinación Académica">Coordinación</option>
+                                        </select>
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">
+                                            Sección
+                                        </label>
+                                        <select
+                                            value={editSection}
+                                            onChange={(e) => setEditSection(e.target.value)}
+                                            className="w-full px-2 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white font-medium focus:ring-2 focus:ring-purple-500 focus:outline-none text-[11px]"
+                                        >
+                                            <option value="">Ninguna</option>
+                                            <option value="A">Sección A</option>
+                                            <option value="B">Sección B</option>
+                                            <option value="C">Sección C</option>
+                                            <option value="D">Sección D</option>
+                                            <option value="Única">Única</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                {/* Especialidad */}
+                                <div>
+                                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">
+                                        Especialidad / Área Curricular
+                                    </label>
+                                    <input
+                                        type="text"
+                                        placeholder="Ej. Matemáticas / Canguro, Robótica, Ciencias..."
+                                        value={editSpecialty}
+                                        onChange={(e) => setEditSpecialty(e.target.value)}
+                                        className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white font-medium focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                                    />
+                                </div>
+
+                                {/* XP Points & Password */}
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    <div>
+                                        <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">
+                                            Puntuación de Mérito (XP)
+                                        </label>
+                                        <input
+                                            type="number"
+                                            min="0"
+                                            step="5"
+                                            required
+                                            value={editXp}
+                                            onChange={(e) => setEditXp(Number(e.target.value))}
+                                            className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white font-black text-sm focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                                        />
+                                        <span className="text-[10px] text-slate-400 mt-0.5 block">
+                                            Nivel resultante: Nv.{Math.max(1, Math.floor(editXp / 250) + 1)}
+                                        </span>
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1 flex items-center gap-1">
+                                            <Lock size={12} className="text-purple-500" />
+                                            <span>Nueva Clave de Acceso</span>
+                                        </label>
+                                        <input
+                                            type="text"
+                                            placeholder="Dejar vacío para conservar actual"
+                                            value={editPassword}
+                                            onChange={(e) => setEditPassword(e.target.value)}
+                                            className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white font-medium focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                                        />
+                                        <span className="text-[10px] text-slate-400 mt-0.5 block">
+                                            Opcional: reasigna contraseña al usuario
+                                        </span>
+                                    </div>
+                                </div>
+
+                                {/* Avatar Picker */}
+                                <div>
+                                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">
+                                        Avatar Emoji
+                                    </label>
+                                    <AvatarPicker selected={editAvatar} onSelect={setEditAvatar} />
+                                </div>
+
+                                <div className="flex justify-end gap-2 pt-3 border-t border-slate-100 dark:border-slate-800">
+                                    <button
+                                        type="button"
+                                        onClick={() => setEditingUser(null)}
+                                        className="px-4 py-2 rounded-xl text-xs font-bold text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all"
+                                    >
+                                        Cancelar
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        disabled={savingUser}
+                                        className="btn-arcade btn-arcade-purple px-5 py-2 rounded-xl text-xs font-bold text-white shadow-md flex items-center gap-1.5"
+                                    >
+                                        <Save size={14} />
+                                        <span>{savingUser ? 'Guardando...' : 'Guardar Cambios 🎯'}</span>
                                     </button>
                                 </div>
                             </form>

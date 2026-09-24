@@ -23,6 +23,8 @@ class User extends Authenticatable
         'password',
         'role',
         'grade',
+        'section',
+        'specialty',
         'avatar',
         'xp_points',
         'level',

@@ -18,9 +18,11 @@ Route::post('/mision/{slug}/completar', [PortalController::class, 'completeLesso
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 Route::post('/dashboard/mision-vision', [DashboardController::class, 'updateClubSettings'])->name('dashboard.updateClubSettings');
 Route::post('/dashboard/award-xp', [DashboardController::class, 'awardXp'])->name('dashboard.awardXp');
+Route::post('/dashboard/usuarios/{id}/actualizar', [DashboardController::class, 'updateUser'])->name('dashboard.updateUser');
 
 // Autenticación y Perfil de Usuario
 Route::post('/usuarios/registro', [UserController::class, 'register'])->name('users.register');
+Route::post('/usuarios/login', [UserController::class, 'login'])->name('users.login');
 Route::post('/usuarios/avatar', [UserController::class, 'updateAvatar'])->name('users.avatar');
 Route::post('/usuarios/cambiar/{id}', [UserController::class, 'switchUser'])->name('users.switch');
 Route::post('/usuarios/logout', [UserController::class, 'logout'])->name('users.logout');

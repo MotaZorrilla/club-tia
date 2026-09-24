@@ -18,6 +18,49 @@ class UserController extends Controller
         return redirect()->route('dashboard')->with('success', "Bienvenido de vuelta, {$user->name} ({$user->role})");
     }
 
+    public function login(Request $request)
+    {
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'password' => 'required|string',
+        ]);
+
+        $user = User::findOrFail($request->user_id);
+
+        if (!Hash::check($request->password, $user->password)) {
+            if ($request->wantsJson() || $request->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Clave de acceso incorrecta. Verifica tu contraseña escolar.',
+                ], 422);
+            }
+
+            return redirect()->back()->withErrors(['password' => 'Clave de acceso incorrecta.']);
+        }
+
+        session(['current_user_id' => $user->id]);
+
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => "¡Bienvenido, {$user->name}!",
+                'user' => [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'role' => $user->role,
+                    'grade' => $user->grade,
+                    'section' => $user->section,
+                    'specialty' => $user->specialty,
+                    'avatar_emoji' => $user->getAvatarEmoji(),
+                    'xp_points' => $user->xp_points,
+                    'level' => $user->level,
+                ],
+            ]);
+        }
+
+        return redirect()->route('dashboard')->with('success', "¡Bienvenido de vuelta, {$user->name}!");
+    }
+
     public function logout(Request $request)
     {
         session()->forget('current_user_id');
@@ -29,24 +72,33 @@ class UserController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:100',
+            'role' => 'nullable|string|in:alumno,colaborador',
             'grade' => 'nullable|string|max:50',
+            'section' => 'nullable|string|max:20',
+            'specialty' => 'nullable|string|max:100',
             'avatar' => 'required|string',
+            'password' => 'nullable|string|min:4',
             'vote_option_id' => 'nullable|string',
         ]);
 
+        $role = $request->role === 'colaborador' ? 'colaborador' : 'alumno';
         $sanitizedName = preg_replace('/[^a-zA-Z0-9]/', '', $request->name);
-        $email = strtolower($sanitizedName ?: 'explorador') . rand(100, 999) . '@montecarmelo.edu.ve';
+        $prefix = $role === 'colaborador' ? 'docente' : 'explorador';
+        $email = strtolower($sanitizedName ?: $prefix) . rand(100, 999) . '@montecarmelo.edu.ve';
+        $password = $request->filled('password') ? $request->password : 'carmelo2026';
 
         $user = User::create([
             'name' => trim($request->name),
             'email' => $email,
-            'password' => Hash::make('carmelo2026'),
-            'role' => 'alumno',
-            'grade' => $request->grade ?? '5° Grado Primaria',
-            'avatar' => $request->avatar ?: '🤖',
-            'xp_points' => 100,
+            'password' => Hash::make($password),
+            'role' => $role,
+            'grade' => $role === 'colaborador' ? ($request->grade ?? 'Docente / Colaborador') : ($request->grade ?? '5° Grado Primaria'),
+            'section' => $role === 'colaborador' ? null : ($request->section ?? 'A'),
+            'specialty' => $role === 'colaborador' ? ($request->specialty ?? 'Docencia General') : null,
+            'avatar' => $request->avatar ?: ($role === 'colaborador' ? '👩‍🏫' : '🤖'),
+            'xp_points' => $role === 'colaborador' ? 200 : 100,
             'level' => 1,
-            'badges' => ['bienvenida_tia'],
+            'badges' => $role === 'colaborador' ? ['bienvenida_docente'] : ['bienvenida_tia'],
         ]);
 
         session(['current_user_id' => $user->id]);
@@ -75,7 +127,8 @@ class UserController extends Controller
             }
         }
 
-        $successMsg = "¡Bienvenido al Club T.I.A., {$user->name}! Has ganado tus primeros {$user->xp_points} XP{$votedMessage} 🌟";
+        $welcomeSubject = $role === 'colaborador' ? "Prof. {$user->name}" : $user->name;
+        $successMsg = "¡Bienvenido al Club T.I.A., {$welcomeSubject}! Has ganado tus primeros {$user->xp_points} XP{$votedMessage} 🌟";
 
         if ($request->wantsJson() || $request->ajax()) {
             return response()->json([
@@ -86,6 +139,8 @@ class UserController extends Controller
                     'name' => $user->name,
                     'role' => $user->role,
                     'grade' => $user->grade,
+                    'section' => $user->section,
+                    'specialty' => $user->specialty,
                     'avatar' => $user->avatar,
                     'avatar_emoji' => $user->getAvatarEmoji(),
                     'xp_points' => $user->xp_points,

@@ -47,6 +47,8 @@ class HandleInertiaRequests extends Middleware
                     'email' => $currentUser->email,
                     'role' => $currentUser->role,
                     'grade' => $currentUser->grade,
+                    'section' => $currentUser->section,
+                    'specialty' => $currentUser->specialty,
                     'avatar' => $currentUser->avatar,
                     'avatar_emoji' => $currentUser->getAvatarEmoji(),
                     'xp_points' => $currentUser->xp_points,
