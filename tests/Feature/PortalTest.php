@@ -148,4 +148,14 @@ class PortalTest extends TestCase
             ->has('students')
         );
     }
+
+    public function test_sitemap_xml_returns_valid_urls(): void
+    {
+        $response = $this->get('/sitemap.xml');
+
+        $response->assertStatus(200);
+        $response->assertHeader('Content-Type', 'application/xml');
+        $response->assertSee('/nosotros');
+        $response->assertSee('/mision/el-despegue-de-la-ia');
+    }
 }

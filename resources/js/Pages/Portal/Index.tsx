@@ -32,7 +32,12 @@ export default function Index({ lessons, activePoll, communityStats, leaderboard
 
     return (
         <AppLayout>
-            <Head title="Portal Oficial · Club T.I.A." />
+            <Head>
+                <title>Portal Oficial · Club T.I.A. Monte Carmelo</title>
+                <meta name="description" content="Portal educativo del Club T.I.A. (Tecnologías de la Información e Inteligencia Artificial) en el Colegio Monte Carmelo. Participa en la encuesta escolar en vivo y explora las 5 Islas de formación ERCA." />
+                <meta property="og:title" content="Club T.I.A. · Tecnologías de la Información e Inteligencia Artificial" />
+                <meta property="og:description" content="Misiones de inteligencia artificial, programación web y robótica para estudiantes del Colegio Monte Carmelo en Puerto Ordaz." />
+            </Head>
 
             {/* HERO SECTION */}
             <section className="relative overflow-hidden pt-10 pb-16 px-4 sm:px-6 lg:px-8">

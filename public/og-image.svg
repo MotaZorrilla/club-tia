@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#090d16" />
+      <stop offset="50%" stop-color="#111827" />
+      <stop offset="100%" stop-color="#1e1b4b" />
+    </linearGradient>
+    <linearGradient id="textGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#a855f7" />
+      <stop offset="50%" stop-color="#818cf8" />
+      <stop offset="100%" stop-color="#22d3ee" />
+    </linearGradient>
+    <linearGradient id="badgeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8b5cf6" />
+      <stop offset="100%" stop-color="#06b6d4" />
+    </linearGradient>
+    <filter id="blurOrb1" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="80" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bgGrad)" />
+
+  <!-- Ambient Glow Circles -->
+  <circle cx="200" cy="150" r="220" fill="#8b5cf6" opacity="0.25" filter="url(#blurOrb1)" />
+  <circle cx="1000" cy="450" r="240" fill="#06b6d4" opacity="0.2" filter="url(#blurOrb1)" />
+
+  <!-- Grid overlay -->
+  <g opacity="0.05" stroke="#ffffff" stroke-width="1">
+    <line x1="0" y1="100" x2="1200" y2="100" />
+    <line x1="0" y1="200" x2="1200" y2="200" />
+    <line x1="0" y1="300" x2="1200" y2="300" />
+    <line x1="0" y1="400" x2="1200" y2="400" />
+    <line x1="0" y1="500" x2="1200" y2="500" />
+    <line x1="200" y1="0" x2="200" y2="630" />
+    <line x1="400" y1="0" x2="400" y2="630" />
+    <line x1="600" y1="0" x2="600" y2="630" />
+    <line x1="800" y1="0" x2="800" y2="630" />
+    <line x1="1000" y1="0" x2="1000" y2="630" />
+  </g>
+
+  <!-- School Tag Pill -->
+  <g transform="translate(100, 100)">
+    <rect width="460" height="44" rx="22" fill="#8b5cf6" opacity="0.2" stroke="#a855f7" stroke-width="1.5" />
+    <text x="24" y="28" font-family="'Plus Jakarta Sans', sans-serif" font-size="16" font-weight="800" fill="#d8b4fe" letter-spacing="1.5">
+      ★ U.E. COLEGIO MONTE CARMELO · PUERTO ORDAZ
+    </text>
+  </g>
+
+  <!-- Main Title -->
+  <text x="100" y="225" font-family="'Plus Jakarta Sans', sans-serif" font-size="72" font-weight="900" fill="url(#textGrad)" letter-spacing="-1">
+    CLUB T.I.A.
+  </text>
+
+  <!-- Subtitle -->
+  <text x="100" y="295" font-family="'Plus Jakarta Sans', sans-serif" font-size="34" font-weight="700" fill="#ffffff" letter-spacing="0">
+    Tecnologías de la Información e Inteligencia Artificial
+  </text>
+
+  <!-- Value Proposition Description -->
+  <text x="100" y="365" font-family="'Plus Jakarta Sans', sans-serif" font-size="22" font-weight="400" fill="#94a3b8">
+    Living Lab escolar de pensamiento computacional, visión por computadora,
+  </text>
+  <text x="100" y="400" font-family="'Plus Jakarta Sans', sans-serif" font-size="22" font-weight="400" fill="#94a3b8">
+    desarrollo web, modelos de lenguaje y preparación olímpica.
+  </text>
+
+  <!-- 3 Feature Chips -->
+  <g transform="translate(100, 470)">
+    <!-- Chip 1 -->
+    <rect x="0" y="0" width="220" height="54" rx="16" fill="#1e293b" stroke="#334155" stroke-width="1" />
+    <text x="20" y="33" font-family="'Plus Jakarta Sans', sans-serif" font-size="16" font-weight="700" fill="#38bdf8">🚀 5 Islas ERCA</text>
+
+    <!-- Chip 2 -->
+    <rect x="240" y="0" width="260" height="54" rx="16" fill="#1e293b" stroke="#334155" stroke-width="1" />
+    <text x="260" y="33" font-family="'Plus Jakarta Sans', sans-serif" font-size="16" font-weight="700" fill="#facc15">🗳️ Live Polling Escolar</text>
+
+    <!-- Chip 3 -->
+    <rect x="520" y="0" width="280" height="54" rx="16" fill="#1e293b" stroke="#334155" stroke-width="1" />
+    <text x="540" y="33" font-family="'Plus Jakarta Sans', sans-serif" font-size="16" font-weight="700" fill="#34d399">⭐ Gamificación &amp; XP</text>
+  </g>
+
+  <!-- Big Robot Icon Right -->
+  <g transform="translate(900, 160)">
+    <rect width="200" height="200" rx="48" fill="url(#badgeGrad)" opacity="0.9" />
+    <text x="42" y="140" font-size="110">🤖</text>
+  </g>
+</svg>

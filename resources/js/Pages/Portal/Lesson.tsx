@@ -83,7 +83,12 @@ export default function LessonPage({ lesson, allLessons, onOpenRegister }: Lesso
 
     return (
         <AppLayout>
-            <Head title={`${lesson.title} · Club T.I.A.`} />
+            <Head>
+                <title>{`${lesson.title} · Club T.I.A. Monte Carmelo`}</title>
+                <meta name="description" content={lesson.description} />
+                <meta property="og:title" content={`${lesson.title} · Club T.I.A.`} />
+                <meta property="og:description" content={lesson.description} />
+            </Head>
 
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
                 {/* Back Nav */}

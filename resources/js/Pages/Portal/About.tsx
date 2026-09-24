@@ -54,7 +54,12 @@ export default function About({ settings: initialSettings, isFacilitador }: Abou
 
     return (
         <AppLayout>
-            <Head title="Misión y Visión · Club T.I.A." />
+            <Head>
+                <title>Misión, Visión e Ideario · Club T.I.A. Monte Carmelo</title>
+                <meta name="description" content="Conoce la Misión, Visión y los 5 Pilares de Formación del Club de Tecnologías de la Información e Inteligencia Artificial del Colegio Monte Carmelo en Puerto Ordaz." />
+                <meta property="og:title" content="Misión & Visión · Club T.I.A. Monte Carmelo" />
+                <meta property="og:description" content="Nuestra propuesta formativa en inteligencia artificial, desarrollo web y pensamiento computacional para estudiantes de primaria y bachillerato." />
+            </Head>
 
             <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
                 {/* Header Banner */}
