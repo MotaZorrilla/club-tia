@@ -3,6 +3,7 @@ import { Head, Link, router } from '@inertiajs/react';
 import AppLayout from '../../Layouts/AppLayout';
 import { ClubSettings } from '../../types';
 import { Target, Compass, Sparkles, Cpu, Shield, Award, Edit3, Save, CheckCircle2 } from 'lucide-react';
+import { appUrl } from '../../lib/route';
 
 interface AboutProps {
     settings: ClubSettings;
@@ -22,7 +23,7 @@ export default function About({ settings: initialSettings, isFacilitador }: Abou
         setSaving(true);
         try {
             const csrfToken = (document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement)?.content || '';
-            const res = await fetch('/dashboard/mision-vision', {
+            const res = await fetch(appUrl('/dashboard/mision-vision'), {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -258,7 +259,7 @@ export default function About({ settings: initialSettings, isFacilitador }: Abou
                 {/* Back to Home CTA */}
                 <div className="text-center pt-4">
                     <Link
-                        href="/"
+                        href={appUrl('/')}
                         className="btn-arcade btn-arcade-purple px-6 py-3 rounded-2xl text-white font-bold font-display text-sm inline-flex items-center gap-2 shadow-lg"
                     >
                         <span>🚀 Regresar a las Islas de Misión</span>

@@ -4,6 +4,7 @@ import AppLayout from '../../Layouts/AppLayout';
 import { Lesson } from '../../types';
 import confetti from 'canvas-confetti';
 import { ArrowLeft, CheckCircle2, Sparkles, HelpCircle, Trophy, Play } from 'lucide-react';
+import { appUrl } from '../../lib/route';
 
 interface LessonProps {
     lesson: Lesson;
@@ -27,7 +28,6 @@ export default function LessonPage({ lesson, allLessons, onOpenRegister }: Lesso
         if (hasAnswered) return;
         setSelectedOption(idx);
         setHasAnswered(true);
-
         if (currentRound && idx === currentRound.correct) {
             setScore(score + 1);
         }
@@ -49,7 +49,7 @@ export default function LessonPage({ lesson, allLessons, onOpenRegister }: Lesso
 
         try {
             const csrfToken = (document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement)?.content || '';
-            const res = await fetch(`/mision/${lesson.slug}/completar`, {
+            const res = await fetch(appUrl(`/mision/${lesson.slug}/completar`), {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -94,7 +94,7 @@ export default function LessonPage({ lesson, allLessons, onOpenRegister }: Lesso
                 {/* Back Nav */}
                 <div className="flex items-center justify-between">
                     <Link
-                        href="/"
+                        href={appUrl('/')}
                         className="inline-flex items-center gap-2 text-xs font-bold text-slate-500 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
                     >
                         <ArrowLeft size={16} />
@@ -217,13 +217,13 @@ export default function LessonPage({ lesson, allLessons, onOpenRegister }: Lesso
                         </p>
                         <div className="pt-4 flex justify-center gap-4">
                             <Link
-                                href="/"
+                                href={appUrl('/')}
                                 className="px-6 py-3 rounded-2xl bg-white text-purple-700 font-bold font-display text-sm shadow-md hover:bg-purple-50 transition-all"
                             >
                                 Regresar al Inicio
                             </Link>
                             <Link
-                                href="/dashboard"
+                                href={appUrl('/dashboard')}
                                 className="px-6 py-3 rounded-2xl bg-purple-900/60 hover:bg-purple-900 text-white font-bold font-display text-sm border border-white/20 transition-all"
                             >
                                 Ver mi Dashboard

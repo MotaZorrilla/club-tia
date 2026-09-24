@@ -28,14 +28,14 @@ class UserController extends Controller
             ]);
         }
 
-        return redirect('/dashboard')->with('success', "Bienvenido de vuelta, {$user->name} ({$user->role})");
+        return redirect()->route('dashboard')->with('success', "Bienvenido de vuelta, {$user->name} ({$user->role})");
     }
 
     public function logout(Request $request)
     {
         session()->forget('current_user_id');
 
-        return redirect('/')->with('info', 'Has cerrado sesión.');
+        return redirect()->route('portal.index')->with('info', 'Has cerrado sesión.');
     }
 
     public function register(Request $request)

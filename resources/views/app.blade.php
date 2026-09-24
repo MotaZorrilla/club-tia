@@ -4,6 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <base href="{{ rtrim(url('/'), '/') }}/">
+    <script>
+        (function() {
+            var theme = localStorage.getItem('tia_theme');
+            if (theme === 'light') {
+                document.documentElement.classList.remove('dark');
+            } else {
+                document.documentElement.classList.add('dark');
+            }
+            window.__APP_BASE__ = "{{ rtrim(url('/'), '/') }}";
+        })();
+    </script>
     <title inertia>{{ config('app.name', 'Club T.I.A. · Colegio Monte Carmelo') }}</title>
     
     <!-- Core SEO Meta Tags -->

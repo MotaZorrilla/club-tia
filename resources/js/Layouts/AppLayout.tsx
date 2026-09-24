@@ -4,6 +4,7 @@ import { SharedProps } from '../types';
 import Navbar from '../Components/Navbar';
 import RegisterModal from '../Components/RegisterModal';
 import { CheckCircle2, AlertCircle, Info, Heart } from 'lucide-react';
+import { appUrl } from '../lib/route';
 
 interface AppLayoutProps {
     children: React.ReactNode;
@@ -83,7 +84,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
                         <span>U.E. Colegio Monte Carmelo (Puerto Ordaz)</span>
                     </div>
                     <div className="flex items-center gap-4">
-                        <Link href="/nosotros" className="hover:text-purple-600 dark:hover:text-purple-400 font-semibold transition-colors">
+                        <Link href={appUrl('/nosotros')} className="hover:text-purple-600 dark:hover:text-purple-400 font-semibold transition-colors">
                             Misión & Visión
                         </Link>
                         <span>·</span>

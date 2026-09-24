@@ -4,6 +4,7 @@ import AppLayout from '../../Layouts/AppLayout';
 import LivePolling from '../../Components/LivePolling';
 import { Lesson, Poll, SharedProps } from '../../types';
 import { Sparkles, Trophy, BookOpen, Calculator, Library, ArrowRight, ShieldCheck, Cpu } from 'lucide-react';
+import { appUrl } from '../../lib/route';
 
 interface IndexProps {
     lessons: Lesson[];
@@ -73,7 +74,7 @@ export default function Index({ lessons, activePoll, communityStats, leaderboard
                             </a>
 
                             <Link
-                                href="/nosotros"
+                                href={appUrl('/nosotros')}
                                 className="btn-arcade btn-arcade-cyan px-6 py-3.5 rounded-2xl text-white font-bold font-display text-base flex items-center gap-2 shadow-lg"
                             >
                                 <BookOpen size={18} />
@@ -205,7 +206,7 @@ export default function Index({ lessons, activePoll, communityStats, leaderboard
 
                                     {lesson.is_unlocked ? (
                                         <Link
-                                            href={`/mision/${lesson.slug}`}
+                                            href={appUrl(`/mision/${lesson.slug}`)}
                                             className="btn-arcade btn-arcade-purple px-4 py-2 rounded-xl text-xs font-bold text-white shadow-sm flex items-center gap-1.5"
                                         >
                                             <span>Jugar Misión</span>

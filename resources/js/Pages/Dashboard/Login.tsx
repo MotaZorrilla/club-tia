@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import AppLayout from '../../Layouts/AppLayout';
 import { ShieldCheck, UserCheck, Sparkles, ArrowRight, UserPlus, GraduationCap, ChevronRight } from 'lucide-react';
+import { appUrl } from '../../lib/route';
 
 interface UserItem {
     id: number;
@@ -27,7 +28,7 @@ export default function DashboardLogin({ users, onOpenRegister }: LoginProps) {
     const students = users.filter(u => u.role === 'alumno');
 
     const handleLoginAs = (userId: number) => {
-        router.post(`/usuarios/cambiar/${userId}`);
+        router.post(appUrl(`/usuarios/cambiar/${userId}`));
     };
 
     const handleStudentSubmit = (e: React.FormEvent) => {

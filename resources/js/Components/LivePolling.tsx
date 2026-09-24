@@ -3,6 +3,7 @@ import { usePage } from '@inertiajs/react';
 import { SharedProps, PollStats } from '../types';
 import confetti from 'canvas-confetti';
 import { BarChart3, Sparkles, CheckCircle2, RotateCcw } from 'lucide-react';
+import { appUrl } from '../lib/route';
 
 interface LivePollingProps {
     poll: {
@@ -52,7 +53,7 @@ export default function LivePolling({ poll: initialPoll, onOpenRegister }: LiveP
         if (!initialPoll) return;
         const interval = setInterval(async () => {
             try {
-                const res = await fetch('/api/polls/active');
+                const res = await fetch(appUrl('/api/polls/active'));
                 if (res.ok) {
                     const data: PollStats = await res.json();
                     setStats(data);
@@ -84,7 +85,7 @@ export default function LivePolling({ poll: initialPoll, onOpenRegister }: LiveP
 
         try {
             const csrfToken = (document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement)?.content || '';
-            const res = await fetch(`/api/polls/${stats.id}/vote`, {
+            const res = await fetch(appUrl(`/api/polls/${stats.id}/vote`), {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

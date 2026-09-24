@@ -3,6 +3,7 @@ import { router } from '@inertiajs/react';
 import confetti from 'canvas-confetti';
 import AvatarPicker, { DEFAULT_AVATARS } from './AvatarPicker';
 import { X, Sparkles, Rocket } from 'lucide-react';
+import { appUrl } from '../lib/route';
 
 interface RegisterModalProps {
     isOpen: boolean;
@@ -32,7 +33,7 @@ export default function RegisterModal({ isOpen, onClose, voteOption, onRegistere
 
         try {
             const csrfToken = (document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement)?.content || '';
-            const res = await fetch('/usuarios/registro', {
+            const res = await fetch(appUrl('/usuarios/registro'), {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

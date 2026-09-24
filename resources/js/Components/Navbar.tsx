@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, router, usePage } from '@inertiajs/react';
 import { SharedProps } from '../types';
 import { Sun, Moon, LogOut, LayoutDashboard, UserPlus, Sparkles } from 'lucide-react';
+import { appUrl } from '../lib/route';
 
 interface NavbarProps {
     onOpenRegister?: () => void;
@@ -37,7 +38,7 @@ export default function Navbar({ onOpenRegister }: NavbarProps) {
     };
 
     const handleLogout = () => {
-        router.post('/usuarios/logout');
+        router.post(appUrl('/usuarios/logout'));
     };
 
     return (
@@ -45,7 +46,7 @@ export default function Navbar({ onOpenRegister }: NavbarProps) {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
                 {/* Logo & Branding */}
                 <div className="flex items-center gap-3">
-                    <Link href="/" className="flex items-center gap-3 group">
+                    <Link href={appUrl('/')} className="flex items-center gap-3 group">
                         <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-purple-600 via-indigo-600 to-cyan-500 flex items-center justify-center text-2xl shadow-lg shadow-purple-500/25 group-hover:scale-105 transition-transform duration-200">
                             🤖
                         </div>
@@ -68,13 +69,13 @@ export default function Navbar({ onOpenRegister }: NavbarProps) {
                 {/* Center Navigation Links */}
                 <nav className="hidden md:flex items-center gap-1.5 bg-slate-100 dark:bg-slate-800/60 p-1.5 rounded-2xl border border-slate-200 dark:border-slate-700/60 text-sm font-semibold">
                     <Link
-                        href="/"
+                        href={appUrl('/')}
                         className="px-3.5 py-1.5 rounded-xl text-slate-700 dark:text-slate-300 hover:text-purple-600 dark:hover:text-white hover:bg-white dark:hover:bg-slate-700 transition-all"
                     >
                         🚀 Islas de Misión
                     </Link>
                     <Link
-                        href="/nosotros"
+                        href={appUrl('/nosotros')}
                         className="px-3.5 py-1.5 rounded-xl text-slate-700 dark:text-slate-300 hover:text-purple-600 dark:hover:text-white hover:bg-white dark:hover:bg-slate-700 transition-all flex items-center gap-1.5"
                     >
                         <span>🎯 Misión & Visión</span>
@@ -128,7 +129,7 @@ export default function Navbar({ onOpenRegister }: NavbarProps) {
 
                             {/* Direct Dashboard Link */}
                             <Link
-                                href="/dashboard"
+                                href={appUrl('/dashboard')}
                                 className="btn-arcade btn-arcade-purple px-4 py-2 rounded-2xl text-white font-bold font-display text-xs sm:text-sm flex items-center gap-1.5 shadow-md hover:shadow-purple-500/25"
                             >
                                 <LayoutDashboard size={16} />
@@ -149,7 +150,7 @@ export default function Navbar({ onOpenRegister }: NavbarProps) {
                         /* Unauthenticated / Guest View */
                         <div className="flex items-center gap-2">
                             <Link
-                                href="/dashboard"
+                                href={appUrl('/dashboard')}
                                 className="btn-arcade btn-arcade-purple px-4 py-2 rounded-2xl text-white font-bold font-display text-xs sm:text-sm flex items-center gap-1.5 shadow-md"
                             >
                                 <LayoutDashboard size={16} />

@@ -19,6 +19,7 @@ import {
     Sparkles,
     Check,
 } from 'lucide-react';
+import { appUrl } from '../../lib/route';
 
 interface DashboardProps {
     user: User;
@@ -71,7 +72,7 @@ export default function DashboardIndex({ user: initialUser, kpis, students: init
         setUpdatingAvatar(true);
         try {
             const csrfToken = (document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement)?.content || '';
-            const res = await fetch('/usuarios/avatar', {
+            const res = await fetch(appUrl('/usuarios/avatar'), {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -101,7 +102,7 @@ export default function DashboardIndex({ user: initialUser, kpis, students: init
         setSavingSettings(true);
         try {
             const csrfToken = (document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement)?.content || '';
-            const res = await fetch('/dashboard/mision-vision', {
+            const res = await fetch(appUrl('/dashboard/mision-vision'), {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -126,7 +127,7 @@ export default function DashboardIndex({ user: initialUser, kpis, students: init
         if (!activePoll || !confirm('¿Estás seguro de reiniciar los votos de la encuesta?')) return;
         try {
             const csrfToken = (document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement)?.content || '';
-            const res = await fetch(`/api/polls/${activePoll.id}/reset`, {
+            const res = await fetch(appUrl(`/api/polls/${activePoll.id}/reset`), {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -150,7 +151,7 @@ export default function DashboardIndex({ user: initialUser, kpis, students: init
         setUpdatingPoll(true);
         try {
             const csrfToken = (document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement)?.content || '';
-            const res = await fetch(`/api/polls/${activePoll.id}/question`, {
+            const res = await fetch(appUrl(`/api/polls/${activePoll.id}/question`), {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -177,7 +178,7 @@ export default function DashboardIndex({ user: initialUser, kpis, students: init
         setAwarding(true);
         try {
             const csrfToken = (document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement)?.content || '';
-            const res = await fetch('/dashboard/award-xp', {
+            const res = await fetch(appUrl('/dashboard/award-xp'), {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -362,7 +363,7 @@ export default function DashboardIndex({ user: initialUser, kpis, students: init
                                         </div>
                                         {l.is_unlocked ? (
                                             <Link
-                                                href={`/mision/${l.slug}`}
+                                                href={appUrl(`/mision/${l.slug}`)}
                                                 className="btn-arcade btn-arcade-purple px-4 py-1.5 rounded-xl text-xs font-bold text-white shadow-sm"
                                             >
                                                 Jugar
