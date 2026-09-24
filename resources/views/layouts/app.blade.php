@@ -7,6 +7,15 @@
     <title>@yield('title', 'Club T.I.A. · Colegio Monte Carmelo')</title>
     <meta name="description" content="Portal Educativo Gamificado del Club de Tecnologías de la Información & Inteligencia Artificial de la U.E. Colegio Monte Carmelo (Puerto Ordaz).">
     
+    <!-- Theme Detection Script (Eliminates Flash of Wrong Theme) -->
+    <script>
+        if (localStorage.getItem('tia_theme') === 'light' || (!('tia_theme' in localStorage) && window.matchMedia('(prefers-color-scheme: light)').matches)) {
+            document.documentElement.classList.remove('dark');
+        } else {
+            document.documentElement.classList.add('dark');
+        }
+    </script>
+
     <!-- Google Fonts: Fredoka (arcade/friendly) + Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,6 +25,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     fontFamily: {
@@ -110,57 +120,57 @@
         }
     </style>
 </head>
-<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col font-sans selection:bg-purple-500 selection:text-white">
+<body class="bg-slate-100 text-slate-800 dark:bg-slate-900 dark:text-slate-100 min-h-screen flex flex-col font-sans selection:bg-purple-500 selection:text-white transition-colors duration-200">
 
     <!-- Ambient glowing backdrop -->
     <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
-        <div class="absolute -top-40 -left-40 w-96 h-96 bg-purple-600/20 rounded-full blur-[120px]"></div>
-        <div class="absolute top-1/3 -right-40 w-96 h-96 bg-cyan-600/20 rounded-full blur-[120px]"></div>
-        <div class="absolute -bottom-40 left-1/3 w-96 h-96 bg-emerald-600/15 rounded-full blur-[120px]"></div>
+        <div class="absolute -top-40 -left-40 w-96 h-96 bg-purple-500/10 dark:bg-purple-600/20 rounded-full blur-[120px]"></div>
+        <div class="absolute top-1/3 -right-40 w-96 h-96 bg-cyan-500/10 dark:bg-cyan-600/20 rounded-full blur-[120px]"></div>
+        <div class="absolute -bottom-40 left-1/3 w-96 h-96 bg-emerald-500/10 dark:bg-emerald-600/15 rounded-full blur-[120px]"></div>
     </div>
 
     <!-- TOP NAVIGATION BAR -->
-    <header class="relative z-50 border-b border-slate-800 bg-slate-900/90 backdrop-blur-md sticky top-0">
+    <header class="relative z-50 border-b border-slate-200/80 bg-white/80 dark:border-slate-800 dark:bg-slate-900/90 backdrop-blur-md sticky top-0 transition-colors">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
             
             <!-- Brand Logo & Identity -->
             <a href="{{ route('portal.index') }}" class="flex items-center gap-3 group">
-                <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-purple-600 via-indigo-500 to-cyan-400 p-0.5 shadow-lg shadow-purple-500/30 group-hover:scale-105 transition-transform">
-                    <div class="w-full h-full bg-slate-900 rounded-[14px] flex items-center justify-center text-2xl">
+                <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-purple-600 via-indigo-500 to-cyan-400 p-0.5 shadow-lg shadow-purple-500/20 group-hover:scale-105 transition-transform">
+                    <div class="w-full h-full bg-white dark:bg-slate-900 rounded-[14px] flex items-center justify-center text-2xl">
                         🤖
                     </div>
                 </div>
                 <div>
                     <div class="flex items-center gap-2">
-                        <span class="font-display text-2xl sm:text-3xl font-bold tracking-wide bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">
+                        <span class="font-display text-2xl sm:text-3xl font-bold tracking-wide bg-gradient-to-r from-purple-600 via-pink-600 to-cyan-600 dark:from-purple-400 dark:via-pink-400 dark:to-cyan-400 bg-clip-text text-transparent">
                             CLUB T.I.A.
                         </span>
-                        <span class="hidden sm:inline-block px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30 uppercase">
+                        <span class="hidden sm:inline-block px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-purple-500/10 text-purple-700 dark:bg-purple-500/20 dark:text-purple-300 border border-purple-300 dark:border-purple-500/30 uppercase">
                             Monte Carmelo
                         </span>
                     </div>
-                    <p class="text-xs text-slate-400 font-medium hidden sm:block">Tecnologías de la Información &amp; Inteligencia Artificial</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 font-medium hidden sm:block">Tecnologías de la Información &amp; Inteligencia Artificial</p>
                 </div>
             </a>
 
-            <!-- Right Controls: User Profile, XP Pill & Role Switcher -->
-            <div class="flex items-center gap-3 sm:gap-4">
+            <!-- Right Controls: Theme Toggle, User Profile, XP Pill & Role Switcher -->
+            <div class="flex items-center gap-2 sm:gap-3">
                 
                 <!-- Quick User Status -->
                 @if(isset($currentUser))
-                <div class="flex items-center gap-2 bg-slate-800/80 border border-slate-700 rounded-2xl p-1.5 sm:px-3 sm:py-1.5 shadow-sm">
-                    <div class="w-9 h-9 rounded-xl bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-xl">
+                <div class="flex items-center gap-2 bg-white/90 border border-slate-200 dark:bg-slate-800/80 dark:border-slate-700 rounded-2xl p-1.5 sm:px-3 sm:py-1.5 shadow-sm">
+                    <div class="w-9 h-9 rounded-xl bg-purple-100 dark:bg-purple-500/20 border border-purple-200 dark:border-purple-500/40 flex items-center justify-center text-xl">
                         {{ $currentUser->getAvatarEmoji() }}
                     </div>
                     <div class="hidden sm:block text-left">
                         <div class="flex items-center gap-1.5">
-                            <span class="text-xs font-bold text-slate-200 leading-tight">{{ $currentUser->name }}</span>
-                            <span class="px-1.5 py-0.2 rounded text-[9px] font-mono font-bold uppercase {{ $currentUser->isFacilitador() ? 'bg-amber-500/20 text-amber-300' : ($currentUser->isColaborador() ? 'bg-cyan-500/20 text-cyan-300' : 'bg-emerald-500/20 text-emerald-300') }}">
+                            <span class="text-xs font-bold text-slate-800 dark:text-slate-200 leading-tight">{{ $currentUser->name }}</span>
+                            <span class="px-1.5 py-0.2 rounded text-[9px] font-mono font-bold uppercase {{ $currentUser->isFacilitador() ? 'bg-amber-100 text-amber-800 dark:bg-amber-500/20 dark:text-amber-300' : ($currentUser->isColaborador() ? 'bg-cyan-100 text-cyan-800 dark:bg-cyan-500/20 dark:text-cyan-300' : 'bg-emerald-100 text-emerald-800 dark:bg-emerald-500/20 dark:text-emerald-300') }}">
                                 {{ $currentUser->role }}
                             </span>
                         </div>
-                        <div class="flex items-center gap-2 text-[11px] text-slate-400 font-mono">
-                            <span class="text-amber-400 font-bold flex items-center gap-0.5">
+                        <div class="flex items-center gap-2 text-[11px] text-slate-500 dark:text-slate-400 font-mono">
+                            <span class="text-amber-600 dark:text-amber-400 font-bold flex items-center gap-0.5">
                                 ⭐ {{ $currentUser->xp_points }} XP
                             </span>
                             <span>· Nivel {{ $currentUser->level }}</span>
@@ -169,14 +179,20 @@
                 </div>
                 @endif
 
+                <!-- Theme Toggle Button (Claro / Oscuro) -->
+                <button id="themeToggleBtn" onclick="toggleTheme()" class="btn-arcade bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 dark:border-slate-700 px-3 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm transition-colors" title="Cambiar Tema (Claro / Oscuro)">
+                    <span id="themeToggleIcon">☀️</span>
+                    <span id="themeToggleText" class="hidden md:inline font-mono">Claro</span>
+                </button>
+
                 <!-- Demo Switcher Button -->
-                <button onclick="document.getElementById('userModal').classList.remove('hidden')" class="btn-arcade bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-600 px-3 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm" title="Cambiar de usuario en la demo">
+                <button onclick="document.getElementById('userModal').classList.remove('hidden')" class="btn-arcade bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 dark:border-slate-700 px-3 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm transition-colors" title="Cambiar de usuario en la demo">
                     <span>👥</span>
                     <span class="hidden md:inline">Roles Demo</span>
                 </button>
 
                 <!-- Back to Aula Virtual Hub -->
-                <a href="https://aula.motazorrilla.com/" target="_blank" class="hidden lg:flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800/80 transition-colors">
+                <a href="https://aula.motazorrilla.com/" target="_blank" class="hidden lg:flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-500 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-white dark:hover:bg-slate-800/80 transition-colors">
                     <span>🏛️</span>
                     <span>Aula Virtual</span>
                 </a>
@@ -208,35 +224,35 @@
     </main>
 
     <!-- FOOTER -->
-    <footer class="relative z-10 border-t border-slate-800 bg-slate-950/80 py-8 mt-16 text-center text-xs text-slate-400">
+    <footer class="relative z-10 border-t border-slate-200 bg-white/80 dark:border-slate-800 dark:bg-slate-950/80 py-8 mt-16 text-center text-xs text-slate-500 dark:text-slate-400 transition-colors">
         <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div class="flex items-center gap-2">
                 <span class="text-lg">🤖</span>
-                <span class="font-display font-bold text-slate-200 text-sm">Club T.I.A. Monte Carmelo</span>
+                <span class="font-display font-bold text-slate-800 dark:text-slate-200 text-sm">Club T.I.A. Monte Carmelo</span>
                 <span>· Puerto Ordaz, Venezuela</span>
             </div>
-            <div class="flex items-center gap-4 text-slate-400">
+            <div class="flex items-center gap-4 text-slate-500 dark:text-slate-400">
                 <span>Facilitador: Ing. Héctor Mota Zorrilla</span>
                 <span>·</span>
-                <span class="text-purple-400 font-semibold">Presupuesto US$ 0 · Software Libre</span>
+                <span class="text-purple-600 dark:text-purple-400 font-semibold">Presupuesto US$ 0 · Software Libre</span>
             </div>
         </div>
     </footer>
 
     <!-- MODAL: CAMBIO RÁPIDO DE USUARIO / REGISTRO DE EXPLORADOR -->
-    <div id="userModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
-        <div class="bg-slate-900 border border-slate-700 rounded-3xl w-full max-w-lg p-6 shadow-2xl relative">
-            <button onclick="document.getElementById('userModal').classList.add('hidden')" class="absolute top-4 right-4 text-slate-400 hover:text-white p-2 text-xl font-bold">
+    <div id="userModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-3xl w-full max-w-lg p-6 shadow-2xl relative transition-colors">
+            <button onclick="document.getElementById('userModal').classList.add('hidden')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 dark:hover:text-white p-2 text-xl font-bold">
                 ✕
             </button>
             
             <div class="flex items-center gap-3 mb-6">
-                <div class="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center text-2xl">
+                <div class="w-10 h-10 rounded-xl bg-purple-100 dark:bg-purple-500/20 text-purple-600 dark:text-purple-300 flex items-center justify-center text-2xl">
                     👥
                 </div>
                 <div>
-                    <h3 class="font-display text-xl font-bold text-white">Selector de Roles (Para la Demo)</h3>
-                    <p class="text-xs text-slate-400">Elige con qué perfil navegar el portal durante la presentación</p>
+                    <h3 class="font-display text-xl font-bold text-slate-900 dark:text-white">Selector de Roles (Para la Demo)</h3>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Elige con qué perfil navegar el portal durante la presentación</p>
                 </div>
             </div>
 
@@ -246,19 +262,19 @@
                 @foreach($allUsers as $u)
                 <form action="{{ route('users.switch', $u->id) }}" method="POST">
                     @csrf
-                    <button type="submit" class="w-full text-left p-3 rounded-2xl border transition-all flex items-center justify-between {{ isset($currentUser) && $currentUser->id === $u->id ? 'bg-purple-900/30 border-purple-500/80 text-white' : 'bg-slate-800/60 border-slate-700/80 text-slate-300 hover:bg-slate-800' }}">
+                    <button type="submit" class="w-full text-left p-3 rounded-2xl border transition-all flex items-center justify-between {{ isset($currentUser) && $currentUser->id === $u->id ? 'bg-purple-50 border-purple-500 text-purple-900 dark:bg-purple-900/30 dark:border-purple-500/80 dark:text-white' : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100 dark:bg-slate-800/60 dark:border-slate-700/80 dark:text-slate-300 dark:hover:bg-slate-800' }}">
                         <div class="flex items-center gap-3">
                             <span class="text-2xl">{{ $u->getAvatarEmoji() }}</span>
                             <div>
                                 <div class="text-sm font-bold">{{ $u->name }}</div>
-                                <div class="text-xs text-slate-400">{{ $u->grade ?? 'Sin grado' }}</div>
+                                <div class="text-xs text-slate-500 dark:text-slate-400">{{ $u->grade ?? 'Sin grado' }}</div>
                             </div>
                         </div>
                         <div class="text-right font-mono text-xs">
-                            <span class="block px-2 py-0.5 rounded text-[10px] font-bold uppercase {{ $u->isFacilitador() ? 'bg-amber-500/20 text-amber-300' : ($u->isColaborador() ? 'bg-cyan-500/20 text-cyan-300' : 'bg-emerald-500/20 text-emerald-300') }}">
+                            <span class="block px-2 py-0.5 rounded text-[10px] font-bold uppercase {{ $u->isFacilitador() ? 'bg-amber-100 text-amber-800 dark:bg-amber-500/20 dark:text-amber-300' : ($u->isColaborador() ? 'bg-cyan-100 text-cyan-800 dark:bg-cyan-500/20 dark:text-cyan-300' : 'bg-emerald-100 text-emerald-800 dark:bg-emerald-500/20 dark:text-emerald-300') }}">
                                 {{ $u->role }}
                             </span>
-                            <span class="text-amber-400 font-bold">⭐ {{ $u->xp_points }} XP</span>
+                            <span class="text-amber-600 dark:text-amber-400 font-bold">⭐ {{ $u->xp_points }} XP</span>
                         </div>
                     </button>
                 </form>
@@ -267,14 +283,14 @@
             </div>
 
             <!-- Quick Register New Student -->
-            <div class="border-t border-slate-800 pt-4">
-                <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Registrar Nuevo Alumno en Vivo</h4>
+            <div class="border-t border-slate-200 dark:border-slate-800 pt-4">
+                <h4 class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-3">Registrar Nuevo Alumno en Vivo</h4>
                 <form action="{{ route('users.register') }}" method="POST" class="space-y-3">
                     @csrf
                     <input type="hidden" name="role" value="alumno">
                     <div class="grid grid-cols-2 gap-3">
-                        <input type="text" name="name" placeholder="Nombre y Apellido" required class="bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-purple-500">
-                        <select name="grade" class="bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-purple-500">
+                        <input type="text" name="name" placeholder="Nombre y Apellido" required class="bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-purple-500">
+                        <select name="grade" class="bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-purple-500">
                             <option value="4° Primaria">4° Primaria</option>
                             <option value="5° Primaria" selected>5° Primaria</option>
                             <option value="6° Primaria">6° Primaria</option>
@@ -287,8 +303,8 @@
                     </div>
                     <div class="flex items-center justify-between gap-2">
                         <div class="flex items-center gap-2">
-                            <label class="text-xs text-slate-400">Avatar:</label>
-                            <select name="avatar" class="bg-slate-800 border border-slate-700 rounded-xl px-2 py-1.5 text-sm text-white">
+                            <label class="text-xs text-slate-500 dark:text-slate-400">Avatar:</label>
+                            <select name="avatar" class="bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-2 py-1.5 text-sm text-slate-900 dark:text-white">
                                 <option value="robot">🤖 Robot</option>
                                 <option value="astronaut">🚀 Astronauta</option>
                                 <option value="scientist">🔬 Científica</option>
@@ -305,6 +321,36 @@
             </div>
         </div>
     </div>
+
+    <!-- Theme Toggle Functionality -->
+    <script>
+        function updateThemeToggleUI(isDark) {
+            const icon = document.getElementById('themeToggleIcon');
+            const text = document.getElementById('themeToggleText');
+            if (icon && text) {
+                icon.innerText = isDark ? '☀️' : '🌙';
+                text.innerText = isDark ? 'Claro' : 'Oscuro';
+            }
+        }
+
+        function toggleTheme() {
+            playSfx('pop');
+            const isDark = document.documentElement.classList.contains('dark');
+            if (isDark) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('tia_theme', 'light');
+                updateThemeToggleUI(false);
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('tia_theme', 'dark');
+                updateThemeToggleUI(true);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            updateThemeToggleUI(document.documentElement.classList.contains('dark'));
+        });
+    </script>
 
     <!-- Web Audio Synthesized Sound Effects for Gamification (Zero External Audio Files) -->
     <script>
