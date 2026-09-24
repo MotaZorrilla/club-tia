@@ -8,7 +8,7 @@ export function appUrl(path: string = ''): string {
         const base = typeof window !== 'undefined' && (window as any).__APP_BASE__
             ? (window as any).__APP_BASE__
             : '';
-        return base || '/';
+        return base ? `${base.replace(/\/+$/, '')}/` : '/';
     }
 
     if (path.startsWith('#') || path.startsWith('http://') || path.startsWith('https://')) {
