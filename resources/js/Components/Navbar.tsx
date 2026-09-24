@@ -37,8 +37,21 @@ export default function Navbar({ onOpenRegister }: NavbarProps) {
         }
     };
 
-    const handleLogout = () => {
-        router.post(appUrl('/usuarios/logout'));
+    const handleLogout = async () => {
+        try {
+            const csrfToken = (document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement)?.content || '';
+            await fetch(appUrl('/usuarios/logout'), {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                },
+            });
+            window.location.href = appUrl('/dashboard');
+        } catch (e) {
+            router.post(appUrl('/usuarios/logout'));
+        }
     };
 
     return (

@@ -65,6 +65,13 @@ class UserController extends Controller
     {
         session()->forget('current_user_id');
 
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Has cerrado sesión.',
+            ]);
+        }
+
         return redirect()->route('portal.index')->with('info', 'Has cerrado sesión.');
     }
 
