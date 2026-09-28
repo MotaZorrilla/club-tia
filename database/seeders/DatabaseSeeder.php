@@ -81,61 +81,201 @@ class DatabaseSeeder extends Seeder
         // 2. Las 5 Islas en el orden exacto solicitado
         if (ClassLesson::count() === 0) {
             // Isla 1: El Despegue de la IA (Activa)
-            ClassLesson::create([
-                'island_number' => 1,
-                'slug' => 'el-despegue-de-la-ia',
-                'title' => 'Misión 01: El Despegue de la IA',
-                'subtitle' => '¿Qué es la Inteligencia Artificial? Conceptos, Datos y Minijuegos',
-                'icon' => '🚀',
-                'badge_name' => 'Insignia Despegue IA 🌟',
-                'is_unlocked' => true,
-                'xp_reward' => 100,
-                'duration_minutes' => 45,
-                'description' => '¡Comienza la aventura! Desmitifica cómo piensan las máquinas, descubre la diferencia entre código y datos, y pon a prueba tu intuición con el desafío "¿IA o Humano?".',
-                'content' => [
-                    'game_rounds' => [
-                        [
-                            'id' => 1,
-                            'type' => 'text',
-                            'prompt' => 'Lee este breve verso: "En los cables susurra el viento de cristal, un pájaro de silicio vuela sobre el mar digital."',
-                            'question' => '¿Quién escribió este verso?',
-                            'options' => ['👨‍🎨 Poeta Humano', '🤖 Inteligencia Artificial'],
-                            'correct' => 1,
-                            'explanation' => '¡Correcto! Fue generado por un modelo de lenguaje en 0.5 segundos combinando patrones de rima y palabras tecnológicas.',
-                        ],
-                        [
-                            'id' => 2,
-                            'type' => 'fact',
-                            'prompt' => 'Para que una computadora reconozca la foto de un gato:',
-                            'question' => '¿Qué método utiliza la Inteligencia Artificial moderna?',
-                            'options' => [
-                                'Regla fija: si tiene bigotes y orejas puntiagudas',
-                                'Aprendizaje Automático: analiza 10.000 fotos de gatos para aprender patrones',
+            ClassLesson::updateOrCreate(
+                ['slug' => 'el-despegue-de-la-ia'],
+                [
+                    'island_number' => 1,
+                    'title' => 'Misión 01: El Despegue de la IA',
+                    'subtitle' => 'Fundamentos Teóricos, Búsqueda Web & Minijuegos de Entrenamiento',
+                    'icon' => '🚀',
+                    'badge_name' => 'Insignia Pionero IA 🌟',
+                    'is_unlocked' => true,
+                    'xp_reward' => 100,
+                    'duration_minutes' => 50,
+                    'description' => '¡Inicia la travesía escolar! Investiga en la web qué es la IA por definición científica, descubre cómo aprenden las máquinas con datos vs. reglas, y domina el arte del prompt con 3 niveles de minijuegos interactivos.',
+                    'content' => [
+                        'level1_webquest' => [
+                            'title' => 'Búsqueda Guiada: ¿Qué es la Inteligencia Artificial?',
+                            'badge' => 'Nivel 1: Verdad vs Ficción',
+                            'search_queries' => [
+                                'definicion de inteligencia artificial unesco',
+                                'diferencia entre inteligencia artificial estrecha y general',
+                                'quien fue alan turing test de turing para ninos',
                             ],
-                            'correct' => 1,
-                            'explanation' => '¡Exacto! El Machine Learning no lee reglas fijas; extrae patrones matemáticos a partir de miles de datos de entrenamiento.',
-                        ],
-                        [
-                            'id' => 3,
-                            'type' => 'text',
-                            'prompt' => 'Si le pides a una IA que calcule 254 x 839, ¿qué hace?',
-                            'question' => '¿Cómo procesa la información?',
-                            'options' => [
-                                'Tiene sentimientos y se cansa',
-                                'Ejecuta operaciones matemáticas lógicas a la velocidad de la luz',
+                            'guiding_questions' => [
+                                '¿La IA tiene conciencia y emociones como en las películas, o es un sistema que calcula patrones matemáticos?',
+                                '¿Qué diferencia a una "IA Estrecha" (como un traductor o ChatGPT) de una "IA General" ficticia?',
                             ],
-                            'correct' => 1,
-                            'explanation' => 'Las máquinas procesan cálculos matemáticos pero no sienten ni tienen conciencia.',
+                            'key_takeaway' => 'La IA no es magia ni tiene sentimientos: es un campo de las ciencias de la computación que diseña sistemas capaces de resolver problemas complejos calculando probabilidades sobre millones de datos.',
+                        ],
+                        'game_rounds' => [
+                            [
+                                'id' => 1,
+                                'type' => 'text',
+                                'prompt' => 'Lee este breve verso: "En los cables susurra el viento de cristal, un pájaro de silicio vuela sobre el mar digital."',
+                                'question' => '¿Quién escribió este verso?',
+                                'options' => ['👨‍🎨 Poeta Humano', '🤖 Inteligencia Artificial'],
+                                'correct' => 1,
+                                'explanation' => '¡Correcto! Fue generado por un modelo de lenguaje en 0.5 segundos combinando patrones de rima y metáforas tecnológicas.',
+                            ],
+                            [
+                                'id' => 2,
+                                'type' => 'fact',
+                                'prompt' => 'Para que una computadora reconozca la foto de un gato entre miles de imágenes:',
+                                'question' => '¿Qué método utiliza la Inteligencia Artificial moderna?',
+                                'options' => [
+                                    'Regla fija escrita a mano: Si tiene 2 orejas triangulares y bigotes',
+                                    'Aprendizaje Automático: Analiza 10.000 fotos de gatos para aprender patrones visuales',
+                                ],
+                                'correct' => 1,
+                                'explanation' => '¡Exacto! El Machine Learning no depende de reglas rígidas escritas por humanos, sino de encontrar patrones estadísticos en grandes volúmenes de datos.',
+                            ],
+                            [
+                                'id' => 3,
+                                'type' => 'text',
+                                'prompt' => 'Un asistente de voz (como Siri o Alexa) te responde: "¡Hoy hace un día soleado, me alegra que salgas a jugar!"',
+                                'question' => '¿Qué significa esa respuesta?',
+                                'options' => [
+                                    'El asistente siente alegría real en su corazón mecánico',
+                                    'Es un guión programado con procesamiento de lenguaje natural (NLP) para sonar amigable',
+                                ],
+                                'correct' => 1,
+                                'explanation' => 'Las máquinas simulan amabilidad mediante patrones de lenguaje, pero carecen de emociones, conciencia o estados de ánimo.',
+                            ],
+                            [
+                                'id' => 4,
+                                'type' => 'logic',
+                                'prompt' => 'Si le pides a una calculadora o modelo de IA que multiplique 4.582 x 9.873:',
+                                'question' => '¿Por qué lo hace en una milésima de segundo?',
+                                'options' => [
+                                    'Ejecuta miles de millones de operaciones lógicas de conmutación electrónica',
+                                    'Tiene un cerebro biológico miniaturizado de silicio',
+                                ],
+                                'correct' => 0,
+                                'explanation' => 'La velocidad de las computadoras proviene del flujo de electricidad a través de transistores microscópicos, no de un cerebro biológico.',
+                            ],
+                        ],
+                        'level2_webquest' => [
+                            'title' => 'Búsqueda Guiada: Algoritmos y Datos (Machine Learning)',
+                            'badge' => 'Nivel 2: Datos vs Reglas',
+                            'search_queries' => [
+                                'que es un algoritmo explicacion sencilla para estudiantes',
+                                'diferencia entre programacion tradicional y machine learning',
+                                'que es un dataset o conjunto de datos de entrenamiento',
+                            ],
+                            'guiding_questions' => [
+                                '¿Qué es un algoritmo en la vida real? (Ej: Una receta para preparar una torta paso a paso).',
+                                '¿Por qué si entrenas a una IA con fotos de perros de un solo color, no sabrá reconocer a los demás?',
+                            ],
+                            'key_takeaway' => 'En la Programación Clásica el humano escribe las reglas (SI/ENTONCES). En el Machine Learning, la computadora examina miles de datos (Dataset) y descubre las reglas por sí misma.',
+                        ],
+                        'level3_webquest' => [
+                            'title' => 'Búsqueda Guiada: Anatomía del Prompt & Alucinaciones',
+                            'badge' => 'Nivel 3: El Arte del Lenguaje',
+                            'search_queries' => [
+                                'que es un prompt en inteligencia artificial y como escribirlo',
+                                'que es una alucinacion en inteligencia artificial',
+                                'como verificar informacion generada por ia tecnicas de fact checking',
+                            ],
+                            'guiding_questions' => [
+                                '¿Cuáles son las 4 partes esenciales de un prompt de calidad profesional? (Rol + Contexto + Tarea + Formato).',
+                                '¿Por qué un modelo de lenguaje puede afirmar con total seguridad un dato falso que nunca ocurrió?',
+                            ],
+                            'key_takeaway' => 'Un Prompt es la brújula con la que diriges a la IA. Si la instrucción es vaga, la IA "alucina" inventando datos; si el prompt tiene Rol, Contexto y Formato, la IA se convierte en un copiloto extraordinario.',
+                        ],
+                        'prompt_challenges' => [
+                            [
+                                'id' => 1,
+                                'title' => 'Desafío 1: El Resumen de Ciencias',
+                                'scenario' => 'Un estudiante de 5° grado quiere preparar una exposición sobre el Sistema Solar.',
+                                'broken_prompt' => 'Dime cosas del espacio.',
+                                'flaw' => 'Es demasiado genérico: no define el grado escolar, no especifica planetas ni el formato de entrega.',
+                                'blocks' => [
+                                    ['id' => 'b1', 'label' => 'Rol Experto', 'text' => 'Actúa como un profesor de astronomía para primaria.', 'is_essential' => true],
+                                    ['id' => 'b2', 'label' => 'Contexto', 'text' => 'Para una clase de 5° grado en Puerto Ordaz.', 'is_essential' => true],
+                                    ['id' => 'b3', 'label' => 'Instrucción Específica', 'text' => 'Explica los 3 planetas más cercanos al Sol y un dato curioso de cada uno.', 'is_essential' => true],
+                                    ['id' => 'b4', 'label' => 'Formato de Salida', 'text' => 'En 3 viñetas breves con emojis y lenguaje divertido.', 'is_essential' => true],
+                                    ['id' => 'b5', 'label' => 'Distractor Innecesario', 'text' => 'Escribe una carta a la NASA en inglés.', 'is_essential' => false],
+                                ],
+                                'correct_selection' => ['b1', 'b2', 'b3', 'b4'],
+                                'repaired_prompt' => 'Actúa como un profesor de astronomía para primaria. Para una clase de 5° grado en Puerto Ordaz, explica los 3 planetas más cercanos al Sol y un dato curioso de cada uno en 3 viñetas breves con emojis.',
+                                'ai_output_bad' => 'El espacio es grande. Tiene estrellas, agujeros negros y galaxias lejanas...',
+                                'ai_output_good' => "☀️ ¡Hola exploradores de Monte Carmelo! Aquí están nuestros vecinos espaciales:\n\n1. 🪨 Mercurio: El más cercano al Sol. ¡En el día es un horno a 430°C y en la noche se congela a -180°C!\n2. ☁️ Venus: Es el planeta más caliente de todos porque su atmósfera atrapa el calor como una olla de presión gigante.\n3. 🌍 Tierra: ¡Nuestro hogar! El único lugar conocido con agua líquida y vida.",
+                                'explanation' => 'Al asignarle Rol ("Profesor de astronomía") y Formato ("3 viñetas breves"), la respuesta pasa de ser un párrafo aburrido a una guía perfecta para estudiar.',
+                            ],
+                            [
+                                'id' => 2,
+                                'title' => 'Desafío 2: Detective Histórico de Puerto Ordaz',
+                                'scenario' => 'Un estudiante de 2° año de Media General necesita investigar los orígenes de la hidroeléctrica de Guri.',
+                                'broken_prompt' => 'Cuéntame de Guri.',
+                                'flaw' => 'La IA puede empezar a inventar fechas o responder con una poesía en lugar de datos históricos verificables.',
+                                'blocks' => [
+                                    ['id' => 'b1', 'label' => 'Rol', 'text' => 'Actúa como un historiador de la ingeniería venezolana.', 'is_essential' => true],
+                                    ['id' => 'b2', 'label' => 'Tarea Precisa', 'text' => 'Indica en qué río está ubicada, en qué año inició operaciones y cuánta energía aporta al país.', 'is_essential' => true],
+                                    ['id' => 'b3', 'label' => 'Regla Anti-Alucinación', 'text' => 'Cita solo datos oficiales verificados; si no estás seguro de un número, indícalo.', 'is_essential' => true],
+                                    ['id' => 'b4', 'label' => 'Distractor Inútil', 'text' => 'Inventa una fábula de peces que hablan.', 'is_essential' => false],
+                                ],
+                                'correct_selection' => ['b1', 'b2', 'b3'],
+                                'repaired_prompt' => 'Actúa como un historiador de la ingeniería venezolana. Indica en qué río está ubicada la Central Hidroeléctrica Simón Bolívar (Guri), en qué año inició operaciones y su relevancia energética, citando solo datos oficiales verificados.',
+                                'ai_output_bad' => 'Guri es una represa que queda en Bolívar. Es muy bonita y tiene agua...',
+                                'ai_output_good' => "⚡ Central Hidroeléctrica Simón Bolívar (Guri):\n\n• Ubicación: Cañón de Necuima sobre el Río Caroní, estado Bolívar, Venezuela.\n• Inauguración: Su primera etapa se inauguró en 1968 y la etapa final en 1986.\n• Aporte Nacional: Genera cerca del 70% de la energía eléctrica consumida en toda Venezuela gracias a su potente embalse.",
+                                'explanation' => 'La instrucción "Cita solo datos verificados" reduce drásticamente las alucinaciones del modelo de lenguaje.',
+                            ],
+                        ],
+                        'glossary' => [
+                            [
+                                'term' => 'Inteligencia Artificial 🤖',
+                                'category' => 'Ciencia & Fundamento',
+                                'def' => 'Disciplina de la computación que crea programas capaces de realizar tareas complejas (como traducir, reconocer fotos o jugar ajedrez) calculando patrones matemáticos.',
+                                'example' => 'El filtro de spam de tu correo o las recomendaciones de videos en YouTube.',
+                                'self_test' => '¿La IA tiene conciencia propia? (No, solo procesa datos y probabilidades).',
+                            ],
+                            [
+                                'term' => 'Algoritmo 📝',
+                                'category' => 'Lógica & Código',
+                                'def' => 'Conjunto ordenado y finito de instrucciones paso a paso para resolver un problema específico de principio a fin.',
+                                'example' => 'Una receta para hornear galletas o los pasos para atarse los cordones de los zapatos.',
+                                'self_test' => '¿Qué pasa si cambias el orden de los pasos en un algoritmo? (El resultado final falla o es inesperado).',
+                            ],
+                            [
+                                'term' => 'Machine Learning 🧠',
+                                'category' => 'Aprendizaje Automático',
+                                'def' => 'Subcampo de la IA donde la computadora "aprende" por sí misma detectando patrones en miles de ejemplos, en lugar de recibir reglas escritas a mano.',
+                                'example' => 'Una app que reconoce perros y gatos tras ver 50.000 fotos de animales.',
+                                'self_test' => '¿Qué necesita el Machine Learning para ser preciso? (Gran cantidad de datos limpios de entrenamiento).',
+                            ],
+                            [
+                                'term' => 'Prompt 💬',
+                                'category' => 'Ingeniería del Lenguaje',
+                                'def' => 'El texto o instrucción estructurada que un ser humano le envía a un modelo de IA para indicarle qué rol asumir, qué tarea hacer y cómo presentar la respuesta.',
+                                'example' => '"Actúa como un profesor de 5° grado y explica la fotosíntesis con una fábula corta."',
+                                'self_test' => '¿Cuáles son las 4 partes de un prompt élite? (Rol + Contexto + Tarea + Formato).',
+                            ],
+                            [
+                                'term' => 'Dataset (Datos de Entrenamiento) 📊',
+                                'category' => 'Alimentación del Modelo',
+                                'def' => 'El conjunto de miles o millones de ejemplos (textos, imágenes, audios) utilizados para entrenar a un modelo de IA.',
+                                'example' => 'Los millones de libros y artículos de internet con los que se entrenó un modelo de lenguaje.',
+                                'self_test' => '¿Qué pasa si un dataset tiene errores? (La IA aprenderá esos mismos errores y sesgos).',
+                            ],
+                            [
+                                'term' => 'Alucinación 😵‍💫',
+                                'category' => 'Seguridad & Verificación',
+                                'def' => 'Fenómeno donde un modelo de lenguaje inventa hechos, nombres o fechas inexistentes y los presenta con total seguridad gramatical.',
+                                'example' => 'Cuando una IA inventa un libro que ningún autor escribió jamás.',
+                                'self_test' => '¿Cómo se combate una alucinación? (Pidiendo fuentes directas y verificando con búsqueda web o RAG).',
+                            ],
+                            [
+                                'term' => 'Token 🧩',
+                                'category' => 'Procesamiento de Lenguaje',
+                                'def' => 'El fragmento más pequeño en que una IA divide las palabras (aproximadamente 4 caracteres o media palabra) para poder calcularlas matemáticamente.',
+                                'example' => 'La palabra "computadora" puede dividirse en los tokens ["compu", "tadora"].',
+                                'self_test' => '¿Las computadoras leen letras como nosotros? (No, las convierten en números llamados tokens).',
+                            ],
                         ],
                     ],
-                    'glossary' => [
-                        ['term' => 'Algoritmo 📝', 'def' => 'Una lista paso a paso de instrucciones ordenadas para resolver un problema, como una receta de cocina.'],
-                        ['term' => 'Machine Learning 🧠', 'def' => 'El método donde la computadora aprende por sí misma analizando muchos ejemplos en lugar de memorizar reglas.'],
-                        ['term' => 'Prompt 💬', 'def' => 'La instrucción, pregunta o contexto que tú le das a una IA para obtener una respuesta útil y precisa.'],
-                        ['term' => 'Alucinación 😵‍💫', 'def' => 'Cuando un modelo de lenguaje inventa datos falsos con total seguridad porque no tiene una fuente verificada (¡por eso usamos RAG!).'],
-                    ],
-                ],
-            ]);
+                ]
+            );
 
             // Isla 2: El Detective de Libros (Bloqueada)
             ClassLesson::create([

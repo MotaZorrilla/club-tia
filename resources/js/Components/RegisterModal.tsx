@@ -16,6 +16,7 @@ interface RegisterModalProps {
 export default function RegisterModal({ isOpen, onClose, voteOption, onRegistered, initialRole = 'alumno' }: RegisterModalProps) {
     const [role, setRole] = useState<'alumno' | 'colaborador'>(initialRole);
     const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
     const [grade, setGrade] = useState('5° Grado Primaria');
     const [section, setSection] = useState('A');
     const [specialty, setSpecialty] = useState('Matemáticas y Robótica');
@@ -54,6 +55,7 @@ export default function RegisterModal({ isOpen, onClose, voteOption, onRegistere
                 body: JSON.stringify({
                     role,
                     name: name.trim(),
+                    email: email.trim() || undefined,
                     grade: role === 'alumno' ? grade : 'Docente / Colaborador',
                     section: role === 'alumno' ? section : null,
                     specialty: role === 'colaborador' ? specialty.trim() : null,
@@ -179,16 +181,34 @@ export default function RegisterModal({ isOpen, onClose, voteOption, onRegistere
                     {/* Name Input */}
                     <div>
                         <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5">
-                            {role === 'colaborador' ? 'Nombre y Apellido del Docente' : 'Tu Nombre o Alias Escolar'}
+                            {role === 'colaborador' ? 'Nombre y Apellido del Docente' : 'Tu Nombre Completo o Alias Escolar'}
                         </label>
                         <input
                             type="text"
                             required
-                            placeholder={role === 'colaborador' ? 'Ej. Prof. Carlos Méndez' : 'Ej. Lucas Silva o ValenTech'}
+                            placeholder={role === 'colaborador' ? 'Ej. Prof. Carlos Méndez' : 'Ej. Sofía Carmelo'}
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white font-medium focus:ring-2 focus:ring-purple-500 focus:outline-none transition-all text-sm"
                         />
+                    </div>
+
+                    {/* Email / Username Input */}
+                    <div>
+                        <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5">
+                            Correo Escolar o Nombre de Usuario
+                        </label>
+                        <input
+                            type="text"
+                            required
+                            placeholder={role === 'colaborador' ? 'carlos.mendez@montecarmelo.edu.ve' : 'sofia.carmelo o sofia@montecarmelo.edu.ve'}
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white font-medium focus:ring-2 focus:ring-purple-500 focus:outline-none transition-all text-sm"
+                        />
+                        <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">
+                            Con este usuario/correo y tu clave iniciarás sesión en cualquier computadora.
+                        </p>
                     </div>
 
                     {/* Student: Grade & Section Grid */}
@@ -307,6 +327,16 @@ export default function RegisterModal({ isOpen, onClose, voteOption, onRegistere
                                     : '¡Unirme al Club T.I.A.! 🌟'}
                             </span>
                         </button>
+                    </div>
+
+                    <div className="text-center pt-2">
+                        <a
+                            href={appUrl('/dashboard')}
+                            onClick={() => onClose()}
+                            className="text-xs font-semibold text-purple-600 hover:text-purple-700 dark:text-purple-400 hover:underline"
+                        >
+                            ¿Ya tienes cuenta de explorador? Inicia sesión aquí →
+                        </a>
                     </div>
                 </form>
             </div>

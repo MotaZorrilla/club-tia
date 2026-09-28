@@ -21,23 +21,35 @@ class UserController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'user_id' => 'required|exists:users,id',
+            'login' => 'nullable|string',
+            'user_id' => 'nullable|exists:users,id',
             'password' => 'required|string',
         ]);
 
-        $user = User::findOrFail($request->user_id);
+        $user = null;
 
-        if (!Hash::check($request->password, $user->password)) {
+        if ($request->filled('user_id')) {
+            $user = User::find($request->user_id);
+        } elseif ($request->filled('login')) {
+            $identifier = trim($request->login);
+            $user = User::whereRaw('LOWER(email) = ?', [strtolower($identifier)])
+                ->orWhereRaw('LOWER(name) = ?', [strtolower($identifier)])
+                ->first();
+        }
+
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            $errMsg = 'Credenciales incorrectas. Verifica tu usuario/correo y contraseña escolar.';
             if ($request->wantsJson() || $request->ajax()) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Clave de acceso incorrecta. Verifica tu contraseña escolar.',
+                    'message' => $errMsg,
                 ], 422);
             }
 
-            return redirect()->back()->withErrors(['password' => 'Clave de acceso incorrecta.']);
+            return redirect()->back()->withErrors(['password' => $errMsg]);
         }
 
+        \Illuminate\Support\Facades\Auth::login($user, true);
         session(['current_user_id' => $user->id]);
 
         if ($request->wantsJson() || $request->ajax()) {
@@ -47,13 +59,16 @@ class UserController extends Controller
                 'user' => [
                     'id' => $user->id,
                     'name' => $user->name,
+                    'email' => $user->email,
                     'role' => $user->role,
                     'grade' => $user->grade,
                     'section' => $user->section,
                     'specialty' => $user->specialty,
+                    'avatar' => $user->avatar,
                     'avatar_emoji' => $user->getAvatarEmoji(),
                     'xp_points' => $user->xp_points,
                     'level' => $user->level,
+                    'badges' => $user->badges ?? [],
                 ],
             ]);
         }
@@ -63,7 +78,10 @@ class UserController extends Controller
 
     public function logout(Request $request)
     {
+        \Illuminate\Support\Facades\Auth::logout();
         session()->forget('current_user_id');
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
         if ($request->wantsJson() || $request->ajax()) {
             return response()->json([
@@ -79,6 +97,7 @@ class UserController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:100',
+            'email' => 'nullable|string|max:150',
             'role' => 'nullable|string|in:alumno,colaborador',
             'grade' => 'nullable|string|max:50',
             'section' => 'nullable|string|max:20',
@@ -89,15 +108,35 @@ class UserController extends Controller
         ]);
 
         $role = $request->role === 'colaborador' ? 'colaborador' : 'alumno';
-        $sanitizedName = preg_replace('/[^a-zA-Z0-9]/', '', $request->name);
-        $prefix = $role === 'colaborador' ? 'docente' : 'explorador';
-        $email = strtolower($sanitizedName ?: $prefix) . rand(100, 999) . '@montecarmelo.edu.ve';
-        $password = $request->filled('password') ? $request->password : 'carmelo2026';
+        $rawEmail = trim($request->input('email', ''));
+
+        // If email provided has no '@', append escolar domain
+        if (!empty($rawEmail)) {
+            if (!str_contains($rawEmail, '@')) {
+                $rawEmail = strtolower(preg_replace('/[^a-zA-Z0-9._-]/', '', $rawEmail)) . '@montecarmelo.edu.ve';
+            }
+        } else {
+            $sanitizedName = preg_replace('/[^a-zA-Z0-9]/', '', $request->name);
+            $prefix = $role === 'colaborador' ? 'docente' : 'explorador';
+            $rawEmail = strtolower($sanitizedName ?: $prefix) . rand(100, 999) . '@montecarmelo.edu.ve';
+        }
+
+        // Check if email already registered
+        $existing = User::where('email', $rawEmail)->first();
+        if ($existing) {
+            $msg = 'Este correo o usuario ya se encuentra registrado. Inicia sesión con tu clave.';
+            if ($request->wantsJson() || $request->ajax()) {
+                return response()->json(['success' => false, 'message' => $msg], 422);
+            }
+            return redirect()->back()->withErrors(['email' => $msg]);
+        }
+
+        $passwordToHash = $request->filled('password') ? $request->password : 'carmelo2026';
 
         $user = User::create([
             'name' => trim($request->name),
-            'email' => $email,
-            'password' => Hash::make($password),
+            'email' => $rawEmail,
+            'password' => Hash::make($passwordToHash),
             'role' => $role,
             'grade' => $role === 'colaborador' ? ($request->grade ?? 'Docente / Colaborador') : ($request->grade ?? '5° Grado Primaria'),
             'section' => $role === 'colaborador' ? null : ($request->section ?? 'A'),
@@ -108,6 +147,7 @@ class UserController extends Controller
             'badges' => $role === 'colaborador' ? ['bienvenida_docente'] : ['bienvenida_tia'],
         ]);
 
+        \Illuminate\Support\Facades\Auth::login($user, true);
         session(['current_user_id' => $user->id]);
 
         $voteStats = null;
@@ -144,6 +184,7 @@ class UserController extends Controller
                 'user' => [
                     'id' => $user->id,
                     'name' => $user->name,
+                    'email' => $user->email,
                     'role' => $user->role,
                     'grade' => $user->grade,
                     'section' => $user->section,
@@ -152,6 +193,7 @@ class UserController extends Controller
                     'avatar_emoji' => $user->getAvatarEmoji(),
                     'xp_points' => $user->xp_points,
                     'level' => $user->level,
+                    'badges' => $user->badges ?? [],
                 ],
                 'stats' => $voteStats,
             ]);

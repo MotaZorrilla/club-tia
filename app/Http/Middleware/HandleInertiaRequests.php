@@ -35,7 +35,7 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-        $userId = session('current_user_id');
+        $userId = \Illuminate\Support\Facades\Auth::id() ?? session('current_user_id');
         $currentUser = $userId ? \App\Models\User::find($userId) : null;
 
         return [

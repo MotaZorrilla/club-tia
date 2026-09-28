@@ -57,6 +57,41 @@ export interface GameRound {
     explanation: string;
 }
 
+export interface PromptChallenge {
+    id: number;
+    title: string;
+    scenario: string;
+    broken_prompt: string;
+    flaw: string;
+    blocks: Array<{
+        id: string;
+        label: string;
+        text: string;
+        is_essential: boolean;
+    }>;
+    correct_selection: string[];
+    repaired_prompt: string;
+    ai_output_bad: string;
+    ai_output_good: string;
+    explanation: string;
+}
+
+export interface GlossaryItem {
+    term: string;
+    category?: string;
+    def: string;
+    example?: string;
+    self_test?: string;
+}
+
+export interface WebQuestMission {
+    title: string;
+    badge: string;
+    search_queries: string[];
+    guiding_questions: string[];
+    key_takeaway: string;
+}
+
 export interface Lesson {
     id: number;
     island_number: number;
@@ -71,6 +106,12 @@ export interface Lesson {
     description: string;
     content?: {
         game_rounds?: GameRound[];
+        glossary?: GlossaryItem[];
+        level1_webquest?: WebQuestMission;
+        level2_webquest?: WebQuestMission;
+        level3_webquest?: WebQuestMission;
+        prompt_challenges?: PromptChallenge[];
+        [key: string]: any;
     };
 }
 
