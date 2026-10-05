@@ -80,7 +80,7 @@ export default function Navbar({ onOpenRegister, onOpenCitizenship }: NavbarProp
                                 </span>
                             </div>
                             <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 hidden sm:block">
-                                Tecnologías e Inteligencia Artificial · Mar, Mié y Vie
+                                Tecnologías e Inteligencia Artificial · Mar, Mié y Jue
                             </p>
                         </div>
                     </Link>

@@ -49,7 +49,7 @@ export default function Index({ lessons, activePoll, communityStats, leaderboard
                         {/* School Badge Pill */}
                         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-purple-500/10 dark:bg-purple-500/20 border border-purple-500/30 text-purple-600 dark:text-purple-300 text-xs font-black uppercase tracking-wider">
                             <Sparkles size={14} className="text-amber-500" />
-                            <span>U.E. Colegio Monte Carmelo · Extracurricular: Mar, Mié y Vie</span>
+                            <span>U.E. Colegio Monte Carmelo · Extracurricular: Mar, Mié y Jue</span>
                         </div>
 
                         {/* Title */}
@@ -153,7 +153,7 @@ export default function Index({ lessons, activePoll, communityStats, leaderboard
                 </div>
             </section>
 
-            {/* LAS 5 ISLAS DE FORMACIÓN ERCA */}
+            {/* LAS MISIONES DE FORMACIÓN ERCA */}
             <section id="islas" className="py-14 px-4 sm:px-6 lg:px-8 bg-slate-50/80 dark:bg-slate-950/50 border-y border-slate-200 dark:border-slate-800">
                 <div className="max-w-7xl mx-auto">
                     <div className="text-center max-w-3xl mx-auto mb-12">
@@ -162,76 +162,104 @@ export default function Index({ lessons, activePoll, communityStats, leaderboard
                             <span>Metodología ERCA: Experiencia, Reflexión, Conceptualización y Aplicación</span>
                         </div>
                         <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-slate-900 dark:text-white">
-                            Las 5 Islas de Misión del Club T.I.A.
+                            Misiones y Rutas de Formación del Club T.I.A.
                         </h2>
                         <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 mt-2">
-                            Cada isla desbloquea un superpoder digital práctico con retos interactivos y recompensas de puntos XP.
+                            Desde el eje transversal de ética y ciudadanía hasta las 5 islas técnicas: retos interactivos, simulación y recompensas XP.
                         </p>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {lessons.map((lesson) => (
-                            <div
-                                key={lesson.id}
-                                className={`rounded-3xl border p-6 flex flex-col justify-between transition-all ${
-                                    lesson.is_unlocked
-                                        ? 'bg-white dark:bg-slate-800/90 border-purple-500/30 shadow-lg hover:shadow-purple-500/10 hover:border-purple-500'
-                                        : 'bg-slate-100/60 dark:bg-slate-800/30 border-slate-200 dark:border-slate-800 opacity-70'
-                                }`}
-                            >
-                                <div>
-                                    {/* Island Header */}
-                                    <div className="flex items-center justify-between mb-4">
-                                        <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-purple-500/20 to-cyan-500/20 border border-purple-500/20 flex items-center justify-center text-3xl shadow-inner">
-                                            {lesson.icon}
+                        {lessons.map((lesson) => {
+                            const isMission0 = lesson.island_number === 0;
+
+                            return (
+                                <div
+                                    key={lesson.id}
+                                    className={`rounded-3xl border p-6 flex flex-col justify-between transition-all ${
+                                        isMission0
+                                            ? 'bg-gradient-to-b from-blue-50/70 via-white to-indigo-50/40 dark:from-slate-900 dark:via-slate-850 dark:to-indigo-950/40 border-2 border-indigo-500/50 dark:border-indigo-500/60 shadow-xl hover:shadow-indigo-500/20 md:col-span-2 lg:col-span-1'
+                                            : lesson.is_unlocked
+                                            ? 'bg-white dark:bg-slate-800/90 border-purple-500/30 shadow-lg hover:shadow-purple-500/10 hover:border-purple-500'
+                                            : 'bg-slate-100/60 dark:bg-slate-800/30 border-slate-200 dark:border-slate-800 opacity-70'
+                                    }`}
+                                >
+                                    <div>
+                                        {/* Island Header */}
+                                        <div className="flex items-center justify-between mb-4">
+                                            <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-3xl shadow-inner ${
+                                                isMission0
+                                                    ? 'bg-gradient-to-tr from-blue-600 to-indigo-600 text-white border border-indigo-400 shadow-indigo-500/30'
+                                                    : 'bg-gradient-to-tr from-purple-500/20 to-cyan-500/20 border border-purple-500/20'
+                                            }`}>
+                                                {lesson.icon}
+                                            </div>
+                                            <div className="text-right">
+                                                <span className={`inline-block text-[11px] font-black uppercase px-2.5 py-1 rounded-full ${
+                                                    isMission0
+                                                        ? 'bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800'
+                                                        : 'bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300'
+                                                }`}>
+                                                    +{lesson.xp_reward} XP
+                                                </span>
+                                                <span className="block text-[10px] text-slate-400 mt-1 font-semibold">
+                                                    ⏱️ {lesson.duration_minutes} min
+                                                </span>
+                                            </div>
                                         </div>
-                                        <div className="text-right">
-                                            <span className="inline-block text-[11px] font-black uppercase px-2.5 py-1 rounded-full bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300">
-                                                +{lesson.xp_reward} XP
+
+                                        {/* Island Title */}
+                                        <div className="flex items-center gap-2 mb-1">
+                                            <span className={`text-xs font-black uppercase tracking-wider ${
+                                                isMission0
+                                                    ? 'text-indigo-600 dark:text-indigo-400'
+                                                    : 'text-purple-600 dark:text-purple-400'
+                                            }`}>
+                                                {isMission0 ? 'Misión 00 · Prólogo Transversal' : `Isla 0${lesson.island_number}`}
                                             </span>
-                                            <span className="block text-[10px] text-slate-400 mt-1 font-semibold">
-                                                ⏱️ {lesson.duration_minutes} min
-                                            </span>
+                                            {isMission0 && (
+                                                <span className="text-[10px] font-mono font-bold uppercase px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-800 dark:text-cyan-300 border border-cyan-500/30">
+                                                    No Negociable
+                                                </span>
+                                            )}
                                         </div>
+
+                                        <h3 className="font-display font-bold text-xl text-slate-900 dark:text-white mt-1">
+                                            {lesson.title}
+                                        </h3>
+                                        <p className="text-xs font-semibold text-cyan-600 dark:text-cyan-400 mt-0.5">
+                                            {lesson.subtitle}
+                                        </p>
+                                        <p className="text-xs text-slate-600 dark:text-slate-300 mt-3 leading-relaxed">
+                                            {lesson.description}
+                                        </p>
                                     </div>
 
-                                    {/* Island Title */}
-                                    <span className="text-xs font-black uppercase text-purple-600 dark:text-purple-400 tracking-wider">
-                                        Isla {lesson.island_number}
-                                    </span>
-                                    <h3 className="font-display font-bold text-xl text-slate-900 dark:text-white mt-1">
-                                        {lesson.title}
-                                    </h3>
-                                    <p className="text-xs font-semibold text-cyan-600 dark:text-cyan-400 mt-0.5">
-                                        {lesson.subtitle}
-                                    </p>
-                                    <p className="text-xs text-slate-600 dark:text-slate-300 mt-3 leading-relaxed">
-                                        {lesson.description}
-                                    </p>
-                                </div>
-
-                                {/* Island Footer Action */}
-                                <div className="mt-6 pt-4 border-t border-slate-100 dark:border-slate-700/60 flex items-center justify-between">
-                                    <span className="text-[11px] font-bold text-amber-500">
-                                        🎖️ {lesson.badge_name}
-                                    </span>
-
-                                    {lesson.is_unlocked ? (
-                                        <Link
-                                            href={appUrl(`/mision/${lesson.slug}`)}
-                                            className="btn-arcade btn-arcade-purple px-4 py-2 rounded-xl text-xs font-bold text-white shadow-sm flex items-center gap-1.5"
-                                        >
-                                            <span>Jugar Misión</span>
-                                            <ArrowRight size={14} />
-                                        </Link>
-                                    ) : (
-                                        <span className="text-xs font-bold text-slate-400 dark:text-slate-500 bg-slate-200 dark:bg-slate-700 px-3 py-1.5 rounded-xl">
-                                            🔒 Próximamente
+                                    {/* Island Footer Action */}
+                                    <div className="mt-6 pt-4 border-t border-slate-100 dark:border-slate-700/60 flex items-center justify-between gap-2">
+                                        <span className="text-[11px] font-bold text-amber-500">
+                                            🎖️ {lesson.badge_name}
                                         </span>
-                                    )}
+
+                                        {lesson.is_unlocked ? (
+                                            <Link
+                                                href={appUrl(`/mision/${lesson.slug}`)}
+                                                className={`btn-arcade px-4 py-2 rounded-xl text-xs font-bold text-white shadow-sm flex items-center gap-1.5 ${
+                                                    isMission0 ? 'btn-arcade-cyan' : 'btn-arcade-purple'
+                                                }`}
+                                            >
+                                                <span>{isMission0 ? 'Entrar a Misión 00' : 'Jugar Misión'}</span>
+                                                <ArrowRight size={14} />
+                                            </Link>
+                                        ) : (
+                                            <span className="text-xs font-bold text-slate-400 dark:text-slate-500 bg-slate-200 dark:bg-slate-700 px-3 py-1.5 rounded-xl">
+                                                🔒 Próximamente
+                                            </span>
+                                        )}
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 </div>
             </section>

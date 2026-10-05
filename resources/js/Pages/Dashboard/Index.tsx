@@ -422,7 +422,7 @@ export default function DashboardIndex({ user: initialUser, kpis, students: init
                         {/* Quick Missions Progress */}
                         <div className="bg-white dark:bg-slate-800 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-700 shadow-sm">
                             <h3 className="font-display font-bold text-lg text-slate-900 dark:text-white mb-4">
-                                🗺️ Progreso en las 5 Islas de Formación
+                                🗺️ Progreso en las Misiones e Islas de Formación
                             </h3>
                             <div className="space-y-3">
                                 {lessons.map((l) => (
@@ -431,7 +431,7 @@ export default function DashboardIndex({ user: initialUser, kpis, students: init
                                             <span className="text-2xl">{l.icon}</span>
                                             <div>
                                                 <h4 className="font-bold text-sm text-slate-900 dark:text-white">
-                                                    Isla {l.island_number}: {l.title}
+                                                    {l.island_number === 0 ? 'Misión 00: ' : `Isla ${l.island_number}: `}{l.title}
                                                 </h4>
                                                 <span className="text-xs text-slate-500 dark:text-slate-400">
                                                     +{l.xp_reward} XP · {l.badge_name}

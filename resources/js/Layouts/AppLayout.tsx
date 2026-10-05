@@ -99,7 +99,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
                         <span className="hidden sm:inline">·</span>
                         <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-purple-600 dark:text-purple-400">
                             <Calendar size={13} />
-                            <span>Extracurricular: Martes, Miércoles y Viernes</span>
+                            <span>Extracurricular: Martes, Miércoles y Jueves</span>
                         </span>
                     </div>
                     <div className="flex items-center gap-4">

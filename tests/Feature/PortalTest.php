@@ -27,7 +27,7 @@ class PortalTest extends TestCase
         $response->assertStatus(200);
         $response->assertInertia(fn (Assert $page) => $page
             ->component('Portal/Index')
-            ->has('lessons', 5)
+            ->has('lessons', 6)
             ->has('activePoll')
             ->has('leaderboard')
         );
@@ -42,6 +42,18 @@ class PortalTest extends TestCase
             ->component('Portal/About')
             ->has('settings.mision')
             ->has('settings.vision')
+        );
+    }
+
+    public function test_mission_00_page_renders_inertia_component(): void
+    {
+        $response = $this->get('/mision/ciudadania-digital-y-etica');
+
+        $response->assertStatus(200);
+        $response->assertInertia(fn (Assert $page) => $page
+            ->component('Portal/Lesson')
+            ->where('lesson.slug', 'ciudadania-digital-y-etica')
+            ->where('lesson.island_number', 0)
         );
     }
 

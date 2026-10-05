@@ -232,7 +232,7 @@ export default function DigitalCitizenshipModal({ isOpen, onClose }: DigitalCiti
                 {/* Footer Controls */}
                 <div className="bg-slate-50 dark:bg-slate-800/80 p-4 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between gap-4">
                     <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
-                        Horario Extracurricular: Martes, Miércoles y Viernes
+                        Horario Extracurricular: Martes, Miércoles y Jueves
                     </span>
                     <button
                         type="button"

@@ -182,38 +182,41 @@ export default function About({ settings: initialSettings, isFacilitador }: Abou
                     </div>
                 </div>
 
-                {/* LOS 5 PILARES DE FORMACIÓN */}
+                {/* LOS 6 PILARES DE FORMACIÓN */}
                 <div className="bg-slate-50 dark:bg-slate-800/40 rounded-3xl p-8 border border-slate-200 dark:border-slate-800">
                     <div className="text-center max-w-2xl mx-auto mb-8">
                         <span className="text-xs font-black uppercase text-amber-500 tracking-wider">
                             Plan Formativo Integral
                         </span>
                         <h2 className="font-display font-bold text-2xl text-slate-900 dark:text-white mt-1">
-                            Los 5 Pilares del Club T.I.A.
+                            Los 6 Pilares del Club T.I.A.
                         </h2>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                        <div className="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700">
-                            <span className="text-2xl">🏗️</span>
+                        {/* 1. ANTIGUO 6: PENSAMIENTO CRÍTICO & ÉTICA */}
+                        <div className="bg-white dark:bg-slate-800 p-5 rounded-2xl border-2 border-indigo-500/40 shadow-sm">
+                            <span className="text-2xl">🛡️</span>
                             <h4 className="font-display font-bold text-base text-slate-900 dark:text-white mt-2">
-                                1. ConTech & Gemelos Digitales
+                                1. Pensamiento Crítico & Ética
                             </h4>
                             <p className="text-xs text-slate-600 dark:text-slate-300 mt-1">
-                                Visores 3D en navegador, conceptos BIM y arquitectura digital interactiva.
+                                Formación en ciudadanía digital, verificación rigurosa de fuentes y uso responsable de la IA.
                             </p>
                         </div>
 
+                        {/* 2. ANTIGUO 4: DESARROLLO WEB FRONT-END */}
                         <div className="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700">
-                            <span className="text-2xl">🐍</span>
+                            <span className="text-2xl">🌐</span>
                             <h4 className="font-display font-bold text-base text-slate-900 dark:text-white mt-2">
-                                2. Python & Algoritmia
+                                2. Desarrollo Web Front-End
                             </h4>
                             <p className="text-xs text-slate-600 dark:text-slate-300 mt-1">
-                                Lógica deductiva y preparación para la Olimpiada Canguro Matemático.
+                                HTML5, Tailwind CSS y JavaScript para publicar proyectos reales.
                             </p>
                         </div>
 
+                        {/* 3. ANTIGUO 3: RAG & NOTEBOOKLM */}
                         <div className="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700">
                             <span className="text-2xl">📚</span>
                             <h4 className="font-display font-bold text-base text-slate-900 dark:text-white mt-2">
@@ -224,33 +227,36 @@ export default function About({ settings: initialSettings, isFacilitador }: Abou
                             </p>
                         </div>
 
-                        <div className="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700">
-                            <span className="text-2xl">🌐</span>
-                            <h4 className="font-display font-bold text-base text-slate-900 dark:text-white mt-2">
-                                4. Desarrollo Web Front-End
-                            </h4>
-                            <p className="text-xs text-slate-600 dark:text-slate-300 mt-1">
-                                HTML5, Tailwind CSS y JavaScript para publicar proyectos reales.
-                            </p>
-                        </div>
-
+                        {/* 4. ANTIGUO 5: VISIÓN ARTIFICIAL */}
                         <div className="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700">
                             <span className="text-2xl">👁️</span>
                             <h4 className="font-display font-bold text-base text-slate-900 dark:text-white mt-2">
-                                5. Visión Artificial
+                                4. Visión Artificial
                             </h4>
                             <p className="text-xs text-slate-600 dark:text-slate-300 mt-1">
                                 Google Teachable Machine con la cámara web del laboratorio de computación.
                             </p>
                         </div>
 
+                        {/* 5. ANTIGUO 2: PYTHON & ALGORITMIA */}
                         <div className="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700">
-                            <span className="text-2xl">🛡️</span>
+                            <span className="text-2xl">🐍</span>
                             <h4 className="font-display font-bold text-base text-slate-900 dark:text-white mt-2">
-                                6. Pensamiento Crítico & Ética
+                                5. Python & Algoritmia
                             </h4>
                             <p className="text-xs text-slate-600 dark:text-slate-300 mt-1">
-                                Formación en ciudadanía digital, verificación rigurosa de fuentes y uso responsable de la IA.
+                                Lógica deductiva y preparación para la Olimpiada Canguro Matemático.
+                            </p>
+                        </div>
+
+                        {/* 6. ANTIGUO 1: CONTECH & GEMELOS DIGITALES */}
+                        <div className="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700">
+                            <span className="text-2xl">🏗️</span>
+                            <h4 className="font-display font-bold text-base text-slate-900 dark:text-white mt-2">
+                                6. ConTech & Gemelos Digitales
+                            </h4>
+                            <p className="text-xs text-slate-600 dark:text-slate-300 mt-1">
+                                Visores 3D en navegador, conceptos BIM y arquitectura digital interactiva.
                             </p>
                         </div>
                     </div>
@@ -272,7 +278,7 @@ export default function About({ settings: initialSettings, isFacilitador }: Abou
                         </div>
 
                         <div className="px-4 py-2 rounded-2xl bg-white dark:bg-slate-800 border border-indigo-200 dark:border-indigo-800 text-xs font-mono font-bold text-indigo-700 dark:text-indigo-300 shadow-sm self-start md:self-auto">
-                            📅 Martes, Miércoles y Viernes
+                            📅 Martes, Miércoles y Jueves
                         </div>
                     </div>
 
