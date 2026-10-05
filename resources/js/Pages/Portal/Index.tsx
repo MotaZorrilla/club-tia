@@ -25,9 +25,10 @@ interface IndexProps {
         rank: string;
     }>;
     onOpenRegister?: (option?: { id: string; text: string; emoji: string }) => void;
+    onOpenCitizenship?: () => void;
 }
 
-export default function Index({ lessons, activePoll, communityStats, leaderboard, onOpenRegister }: IndexProps) {
+export default function Index({ lessons, activePoll, communityStats, leaderboard, onOpenRegister, onOpenCitizenship }: IndexProps) {
     const { auth } = usePage<SharedProps>().props;
     const user = auth.user;
 
@@ -48,7 +49,7 @@ export default function Index({ lessons, activePoll, communityStats, leaderboard
                         {/* School Badge Pill */}
                         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-purple-500/10 dark:bg-purple-500/20 border border-purple-500/30 text-purple-600 dark:text-purple-300 text-xs font-black uppercase tracking-wider">
                             <Sparkles size={14} className="text-amber-500" />
-                            <span>U.E. Colegio Monte Carmelo · Living Lab Escolar</span>
+                            <span>U.E. Colegio Monte Carmelo · Extracurricular: Mar, Mié y Vie</span>
                         </div>
 
                         {/* Title */}
@@ -78,8 +79,19 @@ export default function Index({ lessons, activePoll, communityStats, leaderboard
                                 className="btn-arcade btn-arcade-cyan px-6 py-3.5 rounded-2xl text-white font-bold font-display text-base flex items-center gap-2 shadow-lg"
                             >
                                 <BookOpen size={18} />
-                                <span>Misión & Visión</span>
+                                <span>Ideario & Proyectos</span>
                             </Link>
+
+                            {onOpenCitizenship && (
+                                <button
+                                    type="button"
+                                    onClick={onOpenCitizenship}
+                                    className="btn-arcade bg-white hover:bg-slate-50 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 border border-indigo-400/50 px-5 py-3.5 rounded-2xl font-bold font-display text-sm flex items-center gap-2 shadow-md"
+                                >
+                                    <ShieldCheck size={18} className="text-cyan-500" />
+                                    <span>Ciudadanía Digital</span>
+                                </button>
+                            )}
 
                             {!user && (
                                 <button

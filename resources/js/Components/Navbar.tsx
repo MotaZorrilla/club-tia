@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Link, router, usePage } from '@inertiajs/react';
 import { SharedProps } from '../types';
-import { Sun, Moon, LogOut, LayoutDashboard, UserPlus, Sparkles } from 'lucide-react';
+import { Sun, Moon, LogOut, LayoutDashboard, UserPlus, Sparkles, Shield } from 'lucide-react';
 import { appUrl } from '../lib/route';
 
 interface NavbarProps {
     onOpenRegister?: () => void;
+    onOpenCitizenship?: () => void;
 }
 
-export default function Navbar({ onOpenRegister }: NavbarProps) {
+export default function Navbar({ onOpenRegister, onOpenCitizenship }: NavbarProps) {
     const { auth } = usePage<SharedProps>().props;
     const user = auth.user;
 
@@ -60,20 +61,26 @@ export default function Navbar({ onOpenRegister }: NavbarProps) {
                 {/* Logo & Branding */}
                 <div className="flex items-center gap-3">
                     <Link href={appUrl('/')} className="flex items-center gap-3 group">
-                        <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-purple-600 via-indigo-600 to-cyan-500 flex items-center justify-center text-2xl shadow-lg shadow-purple-500/25 group-hover:scale-105 transition-transform duration-200">
-                            🤖
+                        <div className="relative">
+                            <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-900 via-indigo-700 to-purple-600 flex items-center justify-center text-2xl shadow-lg shadow-indigo-900/30 group-hover:scale-105 transition-transform duration-200 border border-white/20">
+                                🤖
+                            </div>
+                            {/* Monte Carmelo Gold Star Pin */}
+                            <div className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-amber-500 text-slate-950 flex items-center justify-center text-[10px] font-black border-2 border-white dark:border-slate-900 shadow-sm" title="Colegio Monte Carmelo">
+                                ★
+                            </div>
                         </div>
                         <div>
                             <div className="flex items-center gap-2">
-                                <span className="font-display font-bold text-xl sm:text-2xl tracking-wide bg-gradient-to-r from-purple-600 via-indigo-500 to-cyan-500 bg-clip-text text-transparent">
+                                <span className="font-display font-bold text-xl sm:text-2xl tracking-wide bg-gradient-to-r from-blue-700 via-indigo-600 to-cyan-500 dark:from-blue-400 dark:via-indigo-300 dark:to-cyan-400 bg-clip-text text-transparent">
                                     CLUB T.I.A.
                                 </span>
-                                <span className="hidden sm:inline-block text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border border-cyan-500/30">
+                                <span className="hidden sm:inline-block text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-blue-900/10 dark:bg-blue-500/20 text-blue-800 dark:text-blue-300 border border-blue-800/20 dark:border-blue-500/30">
                                     Monte Carmelo
                                 </span>
                             </div>
                             <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 hidden sm:block">
-                                Tecnologías de la Información e Inteligencia Artificial
+                                Tecnologías e Inteligencia Artificial · Mar, Mié y Vie
                             </p>
                         </div>
                     </Link>
@@ -87,11 +94,23 @@ export default function Navbar({ onOpenRegister }: NavbarProps) {
                     >
                         🚀 Islas de Misión
                     </Link>
+                    {onOpenCitizenship && (
+                        <button
+                            type="button"
+                            onClick={onOpenCitizenship}
+                            className="px-3.5 py-1.5 rounded-xl text-slate-700 dark:text-slate-300 hover:text-cyan-600 dark:hover:text-cyan-300 hover:bg-white dark:hover:bg-slate-700 transition-all flex items-center gap-1.5"
+                        >
+                            <span>🛡️ Ciudadanía Digital</span>
+                            <span className="text-[10px] bg-cyan-500 text-white font-bold px-1.5 py-0.2 rounded-full">
+                                Eje
+                            </span>
+                        </button>
+                    )}
                     <Link
                         href={appUrl('/nosotros')}
                         className="px-3.5 py-1.5 rounded-xl text-slate-700 dark:text-slate-300 hover:text-purple-600 dark:hover:text-white hover:bg-white dark:hover:bg-slate-700 transition-all flex items-center gap-1.5"
                     >
-                        <span>🎯 Misión & Visión</span>
+                        <span>🎯 Ideario & Proyectos</span>
                         <span className="text-[10px] bg-purple-500 text-white font-bold px-1.5 py-0.2 rounded-full">
                             Oficial
                         </span>
@@ -100,6 +119,18 @@ export default function Navbar({ onOpenRegister }: NavbarProps) {
 
                 {/* Right Controls: Theme + User / Dashboard */}
                 <div className="flex items-center gap-2.5 sm:gap-3">
+                    {/* Mobile Citizenship Button */}
+                    {onOpenCitizenship && (
+                        <button
+                            type="button"
+                            onClick={onOpenCitizenship}
+                            className="md:hidden w-10 h-10 rounded-2xl bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-600 dark:text-cyan-400 flex items-center justify-center transition-all border border-cyan-500/20"
+                            title="Eje Transversal de Ciudadanía Digital"
+                        >
+                            <Shield size={18} />
+                        </button>
+                    )}
+
                     {/* Theme Toggle Button */}
                     <button
                         type="button"

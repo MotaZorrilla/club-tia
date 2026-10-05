@@ -256,6 +256,92 @@ export default function About({ settings: initialSettings, isFacilitador }: Abou
                     </div>
                 </div>
 
+                {/* PROYECTOS POR LAPSO ASOCIADOS A CONCURSOS Y PRODUCTOS REALES */}
+                <div className="bg-gradient-to-r from-blue-900/10 via-indigo-900/10 to-purple-900/10 dark:from-slate-900 dark:via-indigo-950/30 dark:to-purple-950/30 rounded-3xl p-8 border-2 border-indigo-500/30 space-y-8 shadow-xl">
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-indigo-500/20 pb-5">
+                        <div>
+                            <div className="inline-flex items-center gap-2 px-3 py-0.5 rounded-full bg-indigo-500/10 text-indigo-700 dark:text-indigo-300 text-[10px] font-mono font-bold uppercase tracking-wider border border-indigo-500/20">
+                                <span>🏆 Hoja de Ruta Competitiva · Año Escolar 2026-2027</span>
+                            </div>
+                            <h2 className="font-display font-extrabold text-2xl sm:text-3xl text-slate-900 dark:text-white mt-1">
+                                Proyectos por Lapso Asociados a Concursos
+                            </h2>
+                            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300">
+                                Entregables en 3 formatos concretos: <strong>Simuladores</strong>, <strong>Videojuegos</strong> y <strong>Páginas Web</strong> con el hito insignia del <strong>Bot Escolar</strong>.
+                            </p>
+                        </div>
+
+                        <div className="px-4 py-2 rounded-2xl bg-white dark:bg-slate-800 border border-indigo-200 dark:border-indigo-800 text-xs font-mono font-bold text-indigo-700 dark:text-indigo-300 shadow-sm self-start md:self-auto">
+                            📅 Martes, Miércoles y Viernes
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        {/* LAPSO 1 */}
+                        <div className="bg-white dark:bg-slate-800/90 rounded-2xl p-6 border-2 border-purple-500/30 shadow-md space-y-4 flex flex-col justify-between">
+                            <div className="space-y-3">
+                                <div className="flex items-center justify-between">
+                                    <span className="text-xs font-mono font-black uppercase px-2.5 py-1 rounded-lg bg-purple-500/10 text-purple-700 dark:text-purple-300">
+                                        1° Lapso · Oct - Dic
+                                    </span>
+                                    <span className="text-2xl">🧮</span>
+                                </div>
+                                <h3 className="font-display font-bold text-lg text-slate-900 dark:text-white">
+                                    Simulador: Canguro Matemático
+                                </h3>
+                                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                                    Desarrollo de un simulador web interactivo con retos de lógica deductiva, series numéricas y geometría para preparar a los estudiantes de Monte Carmelo de cara a las olimpiadas matemáticas del 2do lapso.
+                                </p>
+                            </div>
+                            <div className="p-2.5 rounded-xl bg-purple-50 dark:bg-purple-950/40 text-[11px] font-semibold text-purple-800 dark:text-purple-300 border border-purple-200 dark:border-purple-800">
+                                🛠️ Formato: Simulador Web & Lógica Python
+                            </div>
+                        </div>
+
+                        {/* LAPSO 2 */}
+                        <div className="bg-white dark:bg-slate-800/90 rounded-2xl p-6 border-2 border-cyan-500/30 shadow-md space-y-4 flex flex-col justify-between">
+                            <div className="space-y-3">
+                                <div className="flex items-center justify-between">
+                                    <span className="text-xs font-mono font-black uppercase px-2.5 py-1 rounded-lg bg-cyan-500/10 text-cyan-700 dark:text-cyan-300">
+                                        2° Lapso · Ene - Mar
+                                    </span>
+                                    <span className="text-2xl">🔭</span>
+                                </div>
+                                <h3 className="font-display font-bold text-lg text-slate-900 dark:text-white">
+                                    Astronomía & Bot Asistente
+                                </h3>
+                                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                                    Articulación con el Club de Astronomía para simular órbitas y cuerpos celestes, complementado con la construcción del primer <strong>Bot Conversacional Escolar</strong> entrenado con Procesamiento de Lenguaje Natural (NLP).
+                                </p>
+                            </div>
+                            <div className="p-2.5 rounded-xl bg-cyan-50 dark:bg-cyan-950/40 text-[11px] font-semibold text-cyan-800 dark:text-cyan-300 border border-cyan-200 dark:border-cyan-800">
+                                🛠️ Formato: Bot (NLP) & Visualizador Espacial
+                            </div>
+                        </div>
+
+                        {/* LAPSO 3 */}
+                        <div className="bg-white dark:bg-slate-800/90 rounded-2xl p-6 border-2 border-emerald-500/30 shadow-md space-y-4 flex flex-col justify-between">
+                            <div className="space-y-3">
+                                <div className="flex items-center justify-between">
+                                    <span className="text-xs font-mono font-black uppercase px-2.5 py-1 rounded-lg bg-emerald-500/10 text-emerald-700 dark:text-emerald-300">
+                                        3° Lapso · Abr - Jul
+                                    </span>
+                                    <span className="text-2xl">🎮</span>
+                                </div>
+                                <h3 className="font-display font-bold text-lg text-slate-900 dark:text-white">
+                                    Videojuegos & Páginas Web
+                                </h3>
+                                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                                    Creación de videojuegos 2D/3D educativos con motores gráficos ligeros y accesibles, con enfoque en apoyo a la neurodiversidad y publicación de portales web para la Feria Tecnológica Institucional.
+                                </p>
+                            </div>
+                            <div className="p-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-[11px] font-semibold text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+                                🛠️ Formato: Videojuegos & Apps Web Escolares
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 {/* Back to Home CTA */}
                 <div className="text-center pt-4">
                     <Link

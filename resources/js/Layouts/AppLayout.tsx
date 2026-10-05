@@ -3,7 +3,8 @@ import { usePage, Link } from '@inertiajs/react';
 import { SharedProps } from '../types';
 import Navbar from '../Components/Navbar';
 import RegisterModal from '../Components/RegisterModal';
-import { CheckCircle2, AlertCircle, Info, Heart } from 'lucide-react';
+import DigitalCitizenshipModal from '../Components/DigitalCitizenshipModal';
+import { CheckCircle2, AlertCircle, Info, Heart, Shield, Calendar } from 'lucide-react';
 import { appUrl } from '../lib/route';
 
 interface AppLayoutProps {
@@ -13,11 +14,16 @@ interface AppLayoutProps {
 export default function AppLayout({ children }: AppLayoutProps) {
     const { flash } = usePage<SharedProps>().props;
     const [registerModalOpen, setRegisterModalOpen] = useState(false);
+    const [citizenshipModalOpen, setCitizenshipModalOpen] = useState(false);
     const [voteOptionToRegister, setVoteOptionToRegister] = useState<{ id: string; text: string; emoji: string } | null>(null);
 
     const openRegisterModal = (option?: { id: string; text: string; emoji: string }) => {
         setVoteOptionToRegister(option || null);
         setRegisterModalOpen(true);
+    };
+
+    const openCitizenshipModal = () => {
+        setCitizenshipModalOpen(true);
     };
 
     return (
@@ -29,8 +35,11 @@ export default function AppLayout({ children }: AppLayoutProps) {
                 <div className="absolute -bottom-40 left-1/3 w-96 h-96 bg-emerald-500/10 dark:bg-emerald-600/10 rounded-full blur-[120px]"></div>
             </div>
 
-            {/* Navbar */}
-            <Navbar onOpenRegister={() => openRegisterModal()} />
+            {/* Sticky Navbar */}
+            <Navbar
+                onOpenRegister={() => openRegisterModal()}
+                onOpenCitizenship={openCitizenshipModal}
+            />
 
             {/* Flash Messages */}
             <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full mt-4 space-y-2">
@@ -60,6 +69,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
                     if (React.isValidElement(child)) {
                         return React.cloneElement(child as React.ReactElement<any>, {
                             onOpenRegister: openRegisterModal,
+                            onOpenCitizenship: openCitizenshipModal,
                         });
                     }
                     return child;
@@ -73,17 +83,35 @@ export default function AppLayout({ children }: AppLayoutProps) {
                 voteOption={voteOptionToRegister}
             />
 
-            {/* Footer */}
+            {/* Global Digital Citizenship Modal (Eje Transversal) */}
+            <DigitalCitizenshipModal
+                isOpen={citizenshipModalOpen}
+                onClose={() => setCitizenshipModalOpen(false)}
+            />
+
+            {/* Footer Institucional */}
             <footer className="relative z-10 bg-white/60 dark:bg-slate-900/60 border-t border-slate-200 dark:border-slate-800 py-8 px-4 sm:px-6 lg:px-8 transition-colors duration-200">
                 <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-500 dark:text-slate-400">
-                    <div className="flex items-center gap-2">
-                        <span className="font-display font-bold text-slate-700 dark:text-slate-300">
-                            🤖 Club T.I.A.
+                    <div className="flex flex-col sm:flex-row items-center gap-2 text-center sm:text-left">
+                        <span className="font-display font-bold text-slate-800 dark:text-slate-200">
+                            🤖 Club T.I.A. · U.E. Colegio Monte Carmelo
                         </span>
-                        <span>·</span>
-                        <span>U.E. Colegio Monte Carmelo (Puerto Ordaz)</span>
+                        <span className="hidden sm:inline">·</span>
+                        <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-purple-600 dark:text-purple-400">
+                            <Calendar size={13} />
+                            <span>Extracurricular: Martes, Miércoles y Viernes</span>
+                        </span>
                     </div>
                     <div className="flex items-center gap-4">
+                        <button
+                            type="button"
+                            onClick={openCitizenshipModal}
+                            className="inline-flex items-center gap-1 text-cyan-600 dark:text-cyan-400 hover:underline font-semibold"
+                        >
+                            <Shield size={13} />
+                            <span>Ciudadanía Digital</span>
+                        </button>
+                        <span>·</span>
                         <Link href={appUrl('/nosotros')} className="hover:text-purple-600 dark:hover:text-purple-400 font-semibold transition-colors">
                             Misión & Visión
                         </Link>

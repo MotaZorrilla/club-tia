@@ -24,6 +24,7 @@ import {
     Layers,
     MessageSquare,
     Eye,
+    Shield,
     ShieldAlert,
     Radio,
     Award,
@@ -39,6 +40,7 @@ interface LessonProps {
     lesson: Lesson;
     allLessons: Lesson[];
     onOpenRegister?: () => void;
+    onOpenCitizenship?: () => void;
 }
 
 // Synthesized Sound FX via Web Audio API (Zero external assets)
@@ -273,6 +275,35 @@ const PROMPT_CHALLENGES = [
         badOutput: 'Guri es una presa que queda en Venezuela. Es muy grande y produce bastante luz para la gente...',
         goodOutput: '⚡ Central Hidroeléctrica Simón Bolívar (Guri) · Ficha Histórica:\n\n• Ubicación Geográfica: Cañón de Necuima, sobre el Río Caroní, estado Bolívar, Venezuela.\n• Cronología de Operaciones: Su primera etapa se inauguró en 1968 y la etapa final de ampliación en 1986.\n• Aporte Energético Nacional: Genera cerca del 70% de la electricidad consumida en todo el territorio venezolano gracias a su monumental embalse de 4.250 km².',
     },
+    {
+        id: 3,
+        title: 'Caso 3: El Antipatrón de Negaciones vs. Redacción en Positivo',
+        scenario: 'Un estudiante de 1° año de bachillerato quiere publicar una nota sobre el Salto Ángel para la cartelera escolar.',
+        brokenPrompt: 'No hagas un texto largo, no inventes cosas que no pasaron y no uses palabras difíciles.',
+        flaw: 'Está repleto de prohibiciones ambiguas ("no hagas", "no inventes", "no uses") sin especificar rol, qué SÍ debe explicar, tono, extensión ni datos clave.',
+        options: [
+            {
+                id: 'opt_a',
+                text: 'No hables de cosas aburridas ni de números raros.',
+                isCorrect: false,
+                reason: 'Sigue atrapado en el vicio de las negaciones ambiguas. La IA no sabe qué incluir.',
+            },
+            {
+                id: 'opt_b',
+                text: 'Actúa como un guía ambiental venezolano. Redacta en tono positivo y entusiasta una reseña de 3 puntos clave sobre el Salto Ángel (Kerepakupai Vená) para estudiantes de bachillerato: 1) Altura oficial (979 m), 2) Ubicación en el Parque Nacional Canaima, 3) Importancia ecológica, citando únicamente datos geográficos verificados.',
+                isCorrect: true,
+                reason: '¡Maestría en Positive Prompting! Sustituye las negaciones por instrucciones directas, constructivas y verificables con datos oficiales.',
+            },
+            {
+                id: 'opt_c',
+                text: 'Escribe un poema libre con rima sobre cualquier cascada del mundo.',
+                isCorrect: false,
+                reason: 'Desvía el objetivo académico escolar y no incluye los datos geográficos de Canaima.',
+            },
+        ],
+        badOutput: 'El Salto Ángel es una caída de agua. No es pequeña, no está en Caracas y no es artificial...',
+        goodOutput: '🌊 Salto Ángel (Kerepakupai Vená) · Ficha Ambiental Escolar:\n\n1. 🏔️ Récord Mundial: Es la cascada ininterrumpida más alta del planeta, con una caída de 979 metros desde el Auyantepuy.\n2. 🌳 Santuario Natural: Se encuentra en el Parque Nacional Canaima, estado Bolívar, declarado Patrimonio de la Humanidad por la UNESCO.\n3. 🦜 Biodiversidad Única: Sus aguas alimentan ecosistemas milenarios donde conviven especies de flora y fauna endémicas que no existen en ninguna otra parte del mundo.',
+    },
 ];
 
 // Glosario Completo con Definición, Ejemplo Real y Pregunta Clave
@@ -302,6 +333,22 @@ const GLOSSARY_TERMS = [
         answer: 'Grandes volúmenes de datos limpios, variados y bien etiquetados.',
     },
     {
+        term: 'Deep Learning (Aprendizaje Profundo) 🌐',
+        category: 'Redes Neuronales',
+        def: 'Subconjunto del Machine Learning basado en redes neuronales artificiales con múltiples capas ocultas que procesan datos complejos como imágenes, voz y video imitando las sinapsis cerebrales.',
+        example: 'El sistema de visión artificial que identifica señales de tránsito en autos autónomos o el reconocimiento facial en tu teléfono.',
+        question: '¿Por qué se llama "Profundo" (Deep)?',
+        answer: 'Porque posee muchas capas intermedias de neuronas artificiales conectadas en cascada para extraer rasgos abstractos.',
+    },
+    {
+        term: 'NLP (Procesamiento de Lenguaje Natural) 🗣️',
+        category: 'Lingüística Computacional',
+        def: 'Campo de la IA enfocado en que las computadoras entiendan, interpreten, traduzcan y generen texto en idiomas humanos simulando un diálogo natural.',
+        example: 'ChatGPT, Gemini, traductores automáticos de idiomas o los correctores ortográficos inteligentes.',
+        question: '¿El NLP comprende las emociones del usuario?',
+        answer: 'No. Calcula probabilidades matemáticas entre palabras en función de su entrenamiento, pero no siente emociones reales.',
+    },
+    {
         term: 'Dataset (Conjunto de Datos) 📊',
         category: 'Datos & Entrenamiento',
         def: 'La biblioteca o colección organizada de ejemplos (textos, imágenes, audios o números) que se utiliza para entrenar a un modelo de IA.',
@@ -310,12 +357,12 @@ const GLOSSARY_TERMS = [
         answer: 'La IA aprenderá esos mismos errores y dará predicciones equivocadas o injustas.',
     },
     {
-        term: 'Prompt 💬',
+        term: 'Prompt en Positivo 💬',
         category: 'Ingeniería del Lenguaje',
-        def: 'La instrucción, pregunta o contexto que un humano le escribe a un modelo de IA para guiar su respuesta hacia un objetivo exacto.',
-        example: '"Actúa como profesor de ciencias de 5° grado y explica los volcanes con una fábula de 3 viñetas."',
-        question: '¿Cuáles son los 4 pilares de un prompt profesional?',
-        answer: 'Rol (quién es), Contexto (la situación), Tarea (qué debe hacer) y Formato (cómo entregarlo).',
+        def: 'Técnica de redactar instrucciones afirmativas, directas y constructivas especificando exactamente qué debe construir la IA, en lugar de listas confusas de negaciones y prohibiciones.',
+        example: '"Actúa como historiador y resume la batalla en 3 viñetas breves con tono patriótico", en vez de "no hables mucho y no aburras".',
+        question: '¿Por qué fallan las negaciones ambiguas en una IA?',
+        answer: 'Porque al decirle solo lo que no debe hacer, dejas infinitas opciones abiertas sobre lo que sí debe hacer, aumentando el riesgo de alucinación.',
     },
     {
         term: 'Alucinación 😵‍💫',
@@ -324,6 +371,14 @@ const GLOSSARY_TERMS = [
         example: 'Cuando una IA inventa el título de un libro que ningún científico ha escrito jamás.',
         question: '¿Cómo controlas una alucinación en tus estudios?',
         answer: 'Pidiendo fuentes directas verificadas, usando herramientas como NotebookLM y haciendo fact-checking en internet.',
+    },
+    {
+        term: 'Ciudadanía Digital 🛡️',
+        category: 'Ética & Convivencia',
+        def: 'El conjunto de principios éticos, de privacidad, honestidad académica, pensamiento crítico y seguridad para utilizar y crear tecnologías de forma responsable.',
+        example: 'Verificar noticias antes de compartirlas, cuidar tu huella digital y no plagiar trabajos escolares con IA.',
+        question: '¿Cuál es el rol de un Ciudadano Digital T.I.A.?',
+        answer: 'Usar la tecnología como copiloto para resolver problemas de la comunidad con honestidad, pensamiento crítico y respeto.',
     },
     {
         term: 'Token 🧩',
@@ -335,9 +390,11 @@ const GLOSSARY_TERMS = [
     },
 ];
 
-export default function LessonPage({ lesson, allLessons, onOpenRegister }: LessonProps) {
+export default function LessonPage({ lesson, allLessons, onOpenRegister, onOpenCitizenship }: LessonProps) {
     const { auth } = usePage<SharedProps>().props;
     const user = auth.user;
+
+    const [unpluggedOpen, setUnpluggedOpen] = useState(true);
 
     // --- NIVEL 1 STATE: DETECTOR DE INTELIGENCIA ---
     const [roundIdx1, setRoundIdx1] = useState(0);
@@ -615,6 +672,84 @@ export default function LessonPage({ lesson, allLessons, onOpenRegister }: Lesso
                     </div>
                 </div>
 
+                {/* BANNER DEL EJE TRANSVERSAL DE CIUDADANÍA DIGITAL */}
+                <div className="rounded-3xl bg-gradient-to-r from-blue-900/10 via-indigo-900/10 to-cyan-500/10 dark:from-blue-950/40 dark:via-indigo-950/40 dark:to-cyan-950/40 border-2 border-indigo-500/30 p-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-md">
+                    <div className="flex items-center gap-3.5 text-center sm:text-left">
+                        <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-800 to-indigo-700 text-white flex items-center justify-center text-2xl shadow-md shrink-0">
+                            🛡️
+                        </div>
+                        <div>
+                            <div className="flex items-center gap-2 justify-center sm:justify-start">
+                                <span className="font-display font-bold text-sm sm:text-base text-slate-900 dark:text-white">
+                                    Eje Transversal: Ciudadanía Digital & Ética de la IA
+                                </span>
+                                <span className="text-[10px] font-mono font-bold uppercase px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-700 dark:text-cyan-300 border border-cyan-500/30">
+                                    No Negociable
+                                </span>
+                            </div>
+                            <p className="text-xs text-slate-600 dark:text-slate-400">
+                                Curaduría crítica, huella digital inviolable, honestidad académica y redacción afirmativa en positivo.
+                            </p>
+                        </div>
+                    </div>
+                    {onOpenCitizenship && (
+                        <button
+                            type="button"
+                            onClick={onOpenCitizenship}
+                            className="btn-arcade btn-arcade-cyan px-4 py-2 rounded-xl text-white font-bold text-xs flex items-center gap-1.5 shadow-sm shrink-0"
+                        >
+                            <Shield size={14} />
+                            <span>Abrir Decálogo Ético</span>
+                        </button>
+                    )}
+                </div>
+
+                {/* DINÁMICA FÍSICA DESCONECTADA: EL ALGORITMO DEL SÁNDWICH */}
+                <div className="rounded-3xl bg-amber-500/10 dark:bg-amber-950/20 border-2 border-amber-500/30 p-5 sm:p-6 space-y-3 shadow-md">
+                    <div className="flex items-center justify-between gap-2">
+                        <div className="flex items-center gap-3">
+                            <span className="text-3xl">🥪</span>
+                            <div>
+                                <h3 className="font-display font-bold text-base sm:text-lg text-amber-900 dark:text-amber-200">
+                                    Dinámica de Aula Desconectada (10 min): "El Algoritmo del Sándwich"
+                                </h3>
+                                <p className="text-xs text-amber-800/80 dark:text-amber-300/80">
+                                    Apertura previa sin computadoras en el laboratorio · Para Facilitador y Alumnos
+                                </p>
+                            </div>
+                        </div>
+                        <button
+                            type="button"
+                            onClick={() => setUnpluggedOpen(!unpluggedOpen)}
+                            className="text-xs font-bold font-mono px-3 py-1.5 rounded-xl bg-amber-500/20 text-amber-900 dark:text-amber-200 hover:bg-amber-500/30 transition-colors shrink-0"
+                        >
+                            {unpluggedOpen ? 'Ocultar Guía ▲' : 'Ver Guía del Juego ▼'}
+                        </button>
+                    </div>
+
+                    {unpluggedOpen && (
+                        <div className="space-y-3 pt-2 text-xs text-slate-700 dark:text-slate-300 border-t border-amber-500/20 animate-fadeIn">
+                            <p className="leading-relaxed text-xs sm:text-sm">
+                                <strong>Mecánica en el Aula:</strong> El facilitador se presenta como una <em>"Computadora Ultra-Rápida pero Cero Sentido Común"</em>. Un alumno voluntario dicta las instrucciones para preparar un sándwich. Si el estudiante dice <em>"pon mantequilla en el pan"</em>, el facilitador coloca el frasco cerrado sobre la bolsa de pan cerrada.
+                            </p>
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+                                <div className="p-3 rounded-2xl bg-white dark:bg-slate-900 border border-amber-200 dark:border-amber-800/40 space-y-1">
+                                    <span className="font-bold text-amber-700 dark:text-amber-400 block text-xs">1. Ambigüedad Humana</span>
+                                    <p className="text-[11px] text-slate-600 dark:text-slate-400">Asumimos que el otro "sabe lo que queremos decir". Las máquinas no tienen sentido común ni adivinan.</p>
+                                </div>
+                                <div className="p-3 rounded-2xl bg-white dark:bg-slate-900 border border-amber-200 dark:border-amber-800/40 space-y-1">
+                                    <span className="font-bold text-purple-700 dark:text-purple-400 block text-xs">2. Precisión Algorítmica</span>
+                                    <p className="text-[11px] text-slate-600 dark:text-slate-400">Instrucciones ordenadas: girar tapa a la izquierda, tomar cuchillo por el mango y untar 2 cm sobre la rebanada.</p>
+                                </div>
+                                <div className="p-3 rounded-2xl bg-white dark:bg-slate-900 border border-amber-200 dark:border-amber-800/40 space-y-1">
+                                    <span className="font-bold text-emerald-700 dark:text-emerald-400 block text-xs">3. Conexión con IA</span>
+                                    <p className="text-[11px] text-slate-600 dark:text-slate-400">Un Prompt es el algoritmo del lenguaje: si la orden es vaga o negativa, el resultado será un disparate.</p>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+
                 {/* ============================================================== */}
                 {/* NIVEL 1: DEFINICIÓN TEÓRICA + WEBQUEST + MINIJUEGO 1 */}
                 {/* ============================================================== */}
@@ -689,6 +824,38 @@ export default function LessonPage({ lesson, allLessons, onOpenRegister }: Lesso
                                     <ExternalLink size={10} />
                                 </a>
                             ))}
+                        </div>
+                    </div>
+
+                    {/* 1.2.B ANALOGÍA BIOLÓGICA: CEREBRO HUMANO VS RED NEURONAL ARTIFICIAL (DEEP LEARNING) */}
+                    <div className="p-5 rounded-2xl bg-indigo-50/70 dark:bg-indigo-950/30 border border-indigo-200 dark:border-indigo-800/60 space-y-3">
+                        <div className="flex items-center gap-2 text-xs font-bold font-mono text-indigo-800 dark:text-indigo-300 uppercase">
+                            <BrainCircuit size={16} />
+                            <span>Analogía Biológica: Dendritas Cerebrales vs. Redes Neuronales de Silicio (Deep Learning)</span>
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                            <div className="p-4 rounded-xl bg-white dark:bg-slate-900 border border-indigo-100 dark:border-indigo-900/50 space-y-2">
+                                <span className="font-bold text-purple-700 dark:text-purple-300 flex items-center gap-1.5 text-sm">
+                                    <span>🧠</span> Cerebro Humano Biológico
+                                </span>
+                                <ul className="space-y-1 text-[11px] text-slate-600 dark:text-slate-400 list-disc list-inside leading-relaxed">
+                                    <li><strong>86.000 millones de neuronas</strong> interconectadas por dendritas y axones.</li>
+                                    <li>Transmite impulsos electroquímicos y posee <strong>plasticidad cerebral</strong> viva.</li>
+                                    <li>Aprende de la experiencia vivencial, tiene <strong>sentido común, empatía y dolor</strong>.</li>
+                                    <li>Consume apenas unos 20 watts de energía biológica natural.</li>
+                                </ul>
+                            </div>
+                            <div className="p-4 rounded-xl bg-white dark:bg-slate-900 border border-indigo-100 dark:border-indigo-900/50 space-y-2">
+                                <span className="font-bold text-cyan-700 dark:text-cyan-300 flex items-center gap-1.5 text-sm">
+                                    <span>🌐</span> Red Neuronal Artificial (Deep Learning & NLP)
+                                </span>
+                                <ul className="space-y-1 text-[11px] text-slate-600 dark:text-slate-400 list-disc list-inside leading-relaxed">
+                                    <li>Capas de nodos matemáticos (capas ocultas o <em>deep layers</em>) con pesos estadísticos.</li>
+                                    <li>Calcula multiplicaciones matriciales a la velocidad de la luz en microchips.</li>
+                                    <li><strong>NLP (Lenguaje Natural):</strong> Predice la próxima palabra más probable sin sentir emociones.</li>
+                                    <li>No siente, no tiene conciencia ni juicio moral propio: es pura matemática avanzada.</li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
 
@@ -1096,6 +1263,27 @@ export default function LessonPage({ lesson, allLessons, onOpenRegister }: Lesso
                                 <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-950 border border-amber-200 dark:border-amber-800/40">
                                     <span className="font-bold text-amber-700 dark:text-amber-400 block">4. 📄 FORMATO</span>
                                     <span>¿Cómo entregarlo? (Ej: 3 viñetas breves)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* 3.1.B EL PODER DE REDACTAR EN POSITIVO (POSITIVE PROMPTING) */}
+                        <div className="p-4 rounded-xl bg-white dark:bg-slate-900 border-2 border-emerald-500/40 space-y-2 text-xs">
+                            <div className="flex items-center gap-2 font-bold text-emerald-800 dark:text-emerald-300 text-sm">
+                                <span>✨</span>
+                                <span>El Arte de Redactar en Positivo (Superando el Antipatrón "No es X sino Y")</span>
+                            </div>
+                            <p className="text-slate-600 dark:text-slate-300 text-[11px] leading-relaxed">
+                                Las IAs tienen dificultades con las listas de negaciones ambiguas (<em>"no hables mucho, no uses palabras difíciles y no inventes"</em>), porque dejan un mar de dudas sobre lo que <strong>SÍ</strong> deben hacer.
+                            </p>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1 text-[11px]">
+                                <div className="p-2.5 rounded-lg bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-900/40">
+                                    <span className="font-bold text-rose-700 dark:text-rose-400 block mb-0.5">❌ Antipatrón de Negación:</span>
+                                    <span>"No escribas largo y no me des datos aburridos." (Vago, la IA no sabe el tono ni el objetivo).</span>
+                                </div>
+                                <div className="p-2.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-900/40">
+                                    <span className="font-bold text-emerald-700 dark:text-emerald-400 block mb-0.5">✅ Redacción en Positivo:</span>
+                                    <span>"Resume en 3 oraciones entusiastas el récord de altura del Salto Ángel para estudiantes de 1° año con datos verificados."</span>
                                 </div>
                             </div>
                         </div>
