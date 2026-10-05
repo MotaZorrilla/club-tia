@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Head, Link, usePage } from '@inertiajs/react';
 import AppLayout from '../../Layouts/AppLayout';
 import { Lesson, SharedProps } from '../../types';
@@ -39,7 +39,7 @@ import { appUrl } from '../../lib/route';
 interface LessonProps {
     lesson: Lesson;
     allLessons: Lesson[];
-    onOpenRegister?: () => void;
+    onOpenRegister?: (optionOrPrompt?: { id: string; text: string; emoji: string } | string) => void;
     onOpenCitizenship?: () => void;
 }
 
@@ -681,6 +681,18 @@ export default function LessonPage({ lesson, allLessons, onOpenRegister, onOpenC
 
     const [unpluggedOpen, setUnpluggedOpen] = useState(true);
 
+    // Auto-disparador de registro para visitantes en misiones interactivas
+    useEffect(() => {
+        if (!user && onOpenRegister) {
+            const timer = setTimeout(() => {
+                onOpenRegister(
+                    `¡Bienvenido a la ${isMission0 ? 'Misión 00' : `Isla 0${lesson.island_number}`}! Regístrate para interactuar con los retos y guardar tus puntos XP.`
+                );
+            }, 600);
+            return () => clearTimeout(timer);
+        }
+    }, [user]);
+
     // --- NIVEL 1 STATE: DETECTOR DE INTELIGENCIA / CURADURÍA ---
     const [roundIdx1, setRoundIdx1] = useState(0);
     const [selectedOpt1, setSelectedOpt1] = useState<number | null>(null);
@@ -692,6 +704,10 @@ export default function LessonPage({ lesson, allLessons, onOpenRegister, onOpenC
     const currentQ1 = level1Questions[roundIdx1] || level1Questions[0];
 
     const handleSelectQ1 = (idx: number) => {
+        if (!user) {
+            if (onOpenRegister) onOpenRegister(`¡Regístrate como Explorador Escolar para responder los retos de la ${isMission0 ? 'Misión 00' : `Isla 0${lesson.island_number}`} y ganar combo XP!`);
+            return;
+        }
         if (answered1) return;
         setSelectedOpt1(idx);
         setAnswered1(true);
@@ -745,6 +761,10 @@ export default function LessonPage({ lesson, allLessons, onOpenRegister, onOpenC
     const currentSample = dataSamples[sampleIdx] || dataSamples[0];
 
     const handleClassify = (cat: string) => {
+        if (!user) {
+            if (onOpenRegister) onOpenRegister('¡Regístrate como Explorador Escolar para clasificar datos en la red neuronal y ganar puntos!');
+            return;
+        }
         if (classified) return;
         setSelectedCat(cat);
         setClassified(true);
@@ -792,12 +812,20 @@ export default function LessonPage({ lesson, allLessons, onOpenRegister, onOpenC
     const activePromptChallenge = promptChallenges[promptChallengeIdx] || promptChallenges[0];
 
     const handleSelectPromptOpt = (optId: string) => {
+        if (!user) {
+            if (onOpenRegister) onOpenRegister('¡Regístrate como Explorador Escolar para ingresar al Taller de Prompts y ganar puntos!');
+            return;
+        }
         if (testedPrompt) return;
         playSfx('pop');
         setSelectedPromptOpt(optId);
     };
 
     const handleExecutePromptSimulation = () => {
+        if (!user) {
+            if (onOpenRegister) onOpenRegister('¡Regístrate como Explorador Escolar para probar prompts en la IA simulada y ganar puntos!');
+            return;
+        }
         if (!selectedPromptOpt) return;
         setTestedPrompt(true);
 
@@ -836,6 +864,10 @@ export default function LessonPage({ lesson, allLessons, onOpenRegister, onOpenC
     const [masteredTerms, setMasteredTerms] = useState<number[]>([]);
 
     const toggleMasterTerm = (idx: number) => {
+        if (!user) {
+            if (onOpenRegister) onOpenRegister('¡Regístrate como Explorador Escolar para marcar conceptos dominados en tu carnet escolar!');
+            return;
+        }
         if (masteredTerms.includes(idx)) {
             setMasteredTerms(masteredTerms.filter(i => i !== idx));
         } else {
@@ -924,7 +956,7 @@ export default function LessonPage({ lesson, allLessons, onOpenRegister, onOpenC
                         ) : (
                             <button
                                 type="button"
-                                onClick={onOpenRegister}
+                                onClick={() => onOpenRegister && onOpenRegister(`¡Identifícate como Explorador Escolar para activar los minijuegos de la ${isMission0 ? 'Misión 00' : `Isla 0${lesson.island_number}`} y ganar tus medallas!`)}
                                 className="px-3 py-1 rounded-full text-xs font-mono font-bold bg-cyan-100 text-cyan-800 border-cyan-200 hover:bg-cyan-200 transition-colors border"
                             >
                                 Iniciar Sesión / Registro
@@ -932,6 +964,30 @@ export default function LessonPage({ lesson, allLessons, onOpenRegister, onOpenC
                         )}
                     </div>
                 </div>
+
+                {/* AVISO DE VISITANTE / REGISTRO REQUERIDO */}
+                {!user && (
+                    <div className="p-4 sm:p-5 rounded-3xl bg-amber-500/10 dark:bg-amber-500/15 border-2 border-amber-500/40 text-amber-950 dark:text-amber-200 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-lg animate-fadeIn">
+                        <div className="flex items-center gap-3.5">
+                            <span className="text-3xl shrink-0">🛡️</span>
+                            <div className="space-y-0.5">
+                                <strong className="font-display font-bold text-sm sm:text-base text-amber-900 dark:text-amber-100 flex items-center gap-2">
+                                    <span>Modo Visitante: Identificación de Explorador Requerida</span>
+                                </strong>
+                                <p className="text-xs text-amber-800 dark:text-amber-300 leading-relaxed">
+                                    Para interactuar con los retos del laboratorio, acumular XP y desbloquear tu medalla escolar, debes registrarte con tu alias y avatar.
+                                </p>
+                            </div>
+                        </div>
+                        <button
+                            type="button"
+                            onClick={() => onOpenRegister && onOpenRegister(`¡Identifícate como Explorador Escolar para activar los minijuegos de la ${isMission0 ? 'Misión 00' : `Isla 0${lesson.island_number}`} y ganar tus medallas!`)}
+                            className="w-full sm:w-auto btn-arcade btn-arcade-amber px-6 py-2.5 rounded-2xl text-slate-950 font-bold font-display text-xs shrink-0 shadow-md"
+                        >
+                            <span>¡Registrarme (+100 XP Gratis)! 🚀</span>
+                        </button>
+                    </div>
+                )}
 
                 {/* 2. HERO PRINCIPAL DE LA LECCIÓN */}
                 <div className={`rounded-3xl border p-6 sm:p-10 relative overflow-hidden shadow-xl dark:shadow-2xl transition-colors ${

@@ -12,17 +12,30 @@ interface AppLayoutProps {
 }
 
 export default function AppLayout({ children }: AppLayoutProps) {
-    const { flash } = usePage<SharedProps>().props;
+    const { auth, flash } = usePage<SharedProps>().props;
+    const user = auth.user;
+
     const [registerModalOpen, setRegisterModalOpen] = useState(false);
     const [citizenshipModalOpen, setCitizenshipModalOpen] = useState(false);
     const [voteOptionToRegister, setVoteOptionToRegister] = useState<{ id: string; text: string; emoji: string } | null>(null);
+    const [registerPromptMessage, setRegisterPromptMessage] = useState<string | null>(null);
 
-    const openRegisterModal = (option?: { id: string; text: string; emoji: string }) => {
-        setVoteOptionToRegister(option || null);
+    const openRegisterModal = (optionOrPrompt?: { id: string; text: string; emoji: string } | string) => {
+        if (typeof optionOrPrompt === 'string') {
+            setRegisterPromptMessage(optionOrPrompt);
+            setVoteOptionToRegister(null);
+        } else {
+            setVoteOptionToRegister(optionOrPrompt || null);
+            setRegisterPromptMessage(null);
+        }
         setRegisterModalOpen(true);
     };
 
     const openCitizenshipModal = () => {
+        if (!user) {
+            openRegisterModal('¡Regístrate como Explorador Escolar para acceder al decálogo de Ciudadanía Digital y firmar el compromiso!');
+            return;
+        }
         setCitizenshipModalOpen(true);
     };
 
@@ -81,6 +94,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
                 isOpen={registerModalOpen}
                 onClose={() => setRegisterModalOpen(false)}
                 voteOption={voteOptionToRegister}
+                promptMessage={registerPromptMessage}
             />
 
             {/* Global Digital Citizenship Modal (Eje Transversal) */}
@@ -92,9 +106,14 @@ export default function AppLayout({ children }: AppLayoutProps) {
             {/* Footer Institucional */}
             <footer className="relative z-10 bg-white/60 dark:bg-slate-900/60 border-t border-slate-200 dark:border-slate-800 py-8 px-4 sm:px-6 lg:px-8 transition-colors duration-200">
                 <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-500 dark:text-slate-400">
-                    <div className="flex flex-col sm:flex-row items-center gap-2 text-center sm:text-left">
+                    <div className="flex flex-col sm:flex-row items-center gap-2 text-center sm:text-left flex-wrap">
                         <span className="font-display font-bold text-slate-800 dark:text-slate-200">
                             🤖 Club T.I.A. · U.E. Colegio Monte Carmelo
+                        </span>
+                        <span className="hidden sm:inline">·</span>
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20 font-mono text-[10px] font-bold shadow-sm">
+                            <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+                            <span>v0.9.0-beta · Fase de Pruebas</span>
                         </span>
                         <span className="hidden sm:inline">·</span>
                         <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-purple-600 dark:text-purple-400">

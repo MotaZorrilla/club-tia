@@ -9,11 +9,12 @@ interface RegisterModalProps {
     isOpen: boolean;
     onClose: () => void;
     voteOption?: { id: string; text: string; emoji: string } | null;
+    promptMessage?: string | null;
     onRegistered?: (userData: any, newStats?: any) => void;
     initialRole?: 'alumno' | 'colaborador';
 }
 
-export default function RegisterModal({ isOpen, onClose, voteOption, onRegistered, initialRole = 'alumno' }: RegisterModalProps) {
+export default function RegisterModal({ isOpen, onClose, voteOption, promptMessage, onRegistered, initialRole = 'alumno' }: RegisterModalProps) {
     const [role, setRole] = useState<'alumno' | 'colaborador'>(initialRole);
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -113,14 +114,18 @@ export default function RegisterModal({ isOpen, onClose, voteOption, onRegistere
                         </div>
                         <div>
                             <h2 className="text-xl font-bold font-display tracking-wide">
-                                {voteOption
+                                {promptMessage
+                                    ? '¡Registro de Explorador Escolar!'
+                                    : voteOption
                                     ? '¡Vota y Únete al Club T.I.A.!'
                                     : role === 'colaborador'
                                     ? 'Registro de Docente / Colaborador'
                                     : '¡Identifícate como Explorador T.I.A.!'}
                             </h2>
                             <p className="text-xs text-purple-100 font-medium mt-0.5">
-                                {voteOption
+                                {promptMessage
+                                    ? promptMessage
+                                    : voteOption
                                     ? `Estás a un paso de votar por: "${voteOption.text}"`
                                     : 'Colegio Monte Carmelo · Registro Oficial'}
                             </p>

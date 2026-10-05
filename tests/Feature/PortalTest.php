@@ -83,6 +83,17 @@ class PortalTest extends TestCase
         ]);
     }
 
+    public function test_guest_cannot_complete_mission_without_registration(): void
+    {
+        $response = $this->postJson('/mision/ciudadania-digital-y-etica/completar');
+
+        $response->assertStatus(401);
+        $response->assertJson([
+            'success' => false,
+            'requires_auth' => true,
+        ]);
+    }
+
     public function test_student_can_register_with_emoji_avatar_and_auto_vote(): void
     {
         $poll = Poll::first();

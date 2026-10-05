@@ -24,7 +24,7 @@ interface IndexProps {
         level: number;
         rank: string;
     }>;
-    onOpenRegister?: (option?: { id: string; text: string; emoji: string }) => void;
+    onOpenRegister?: (option?: { id: string; text: string; emoji: string } | string) => void;
     onOpenCitizenship?: () => void;
 }
 
@@ -242,15 +242,28 @@ export default function Index({ lessons, activePoll, communityStats, leaderboard
                                         </span>
 
                                         {lesson.is_unlocked ? (
-                                            <Link
-                                                href={appUrl(`/mision/${lesson.slug}`)}
-                                                className={`btn-arcade px-4 py-2 rounded-xl text-xs font-bold text-white shadow-sm flex items-center gap-1.5 ${
-                                                    isMission0 ? 'btn-arcade-cyan' : 'btn-arcade-purple'
-                                                }`}
-                                            >
-                                                <span>{isMission0 ? 'Entrar a Misión 00' : 'Jugar Misión'}</span>
-                                                <ArrowRight size={14} />
-                                            </Link>
+                                            user ? (
+                                                <Link
+                                                    href={appUrl(`/mision/${lesson.slug}`)}
+                                                    className={`btn-arcade px-4 py-2 rounded-xl text-xs font-bold text-white shadow-sm flex items-center gap-1.5 ${
+                                                        isMission0 ? 'btn-arcade-cyan' : 'btn-arcade-purple'
+                                                    }`}
+                                                >
+                                                    <span>{isMission0 ? 'Entrar a Misión 00' : 'Jugar Misión'}</span>
+                                                    <ArrowRight size={14} />
+                                                </Link>
+                                            ) : (
+                                                <button
+                                                    type="button"
+                                                    onClick={() => onOpenRegister && onOpenRegister(`¡Regístrate como Explorador Escolar para ingresar a la ${isMission0 ? 'Misión 00' : `Isla 0${lesson.island_number}`} y acumular tus puntos XP!`)}
+                                                    className={`btn-arcade px-4 py-2 rounded-xl text-xs font-bold text-white shadow-sm flex items-center gap-1.5 ${
+                                                        isMission0 ? 'btn-arcade-cyan' : 'btn-arcade-purple'
+                                                    }`}
+                                                >
+                                                    <span>{isMission0 ? 'Entrar a Misión 00' : 'Jugar Misión'}</span>
+                                                    <ArrowRight size={14} />
+                                                </button>
+                                            )
                                         ) : (
                                             <span className="text-xs font-bold text-slate-400 dark:text-slate-500 bg-slate-200 dark:bg-slate-700 px-3 py-1.5 rounded-xl">
                                                 🔒 Próximamente
