@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { usePage, Link } from '@inertiajs/react';
 import { SharedProps } from '../types';
 import Navbar from '../Components/Navbar';
@@ -38,6 +38,22 @@ export default function AppLayout({ children }: AppLayoutProps) {
         }
         setCitizenshipModalOpen(true);
     };
+
+    // Escuchar eventos globales para disparar modales desde cualquier componente
+    useEffect(() => {
+        const handleOpenRegister = (e: any) => {
+            openRegisterModal(e.detail);
+        };
+        const handleOpenCitizenship = () => {
+            openCitizenshipModal();
+        };
+        window.addEventListener('open-register-modal', handleOpenRegister);
+        window.addEventListener('open-citizenship-modal', handleOpenCitizenship);
+        return () => {
+            window.removeEventListener('open-register-modal', handleOpenRegister);
+            window.removeEventListener('open-citizenship-modal', handleOpenCitizenship);
+        };
+    }, [user]);
 
     return (
         <div className="min-h-screen flex flex-col bg-slate-100 text-slate-800 dark:bg-slate-900 dark:text-slate-100 selection:bg-purple-500 selection:text-white transition-colors duration-200">

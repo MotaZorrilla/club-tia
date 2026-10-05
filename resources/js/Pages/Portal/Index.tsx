@@ -5,6 +5,7 @@ import LivePolling from '../../Components/LivePolling';
 import { Lesson, Poll, SharedProps } from '../../types';
 import { Sparkles, Trophy, BookOpen, Calculator, Library, ArrowRight, ShieldCheck, Cpu } from 'lucide-react';
 import { appUrl } from '../../lib/route';
+import { triggerRegisterModal, triggerCitizenshipModal } from '../../lib/authModal';
 
 interface IndexProps {
     lessons: Lesson[];
@@ -82,21 +83,19 @@ export default function Index({ lessons, activePoll, communityStats, leaderboard
                                 <span>Ideario & Proyectos</span>
                             </Link>
 
-                            {onOpenCitizenship && (
-                                <button
-                                    type="button"
-                                    onClick={onOpenCitizenship}
-                                    className="btn-arcade bg-white hover:bg-slate-50 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 border border-indigo-400/50 px-5 py-3.5 rounded-2xl font-bold font-display text-sm flex items-center gap-2 shadow-md"
-                                >
-                                    <ShieldCheck size={18} className="text-cyan-500" />
-                                    <span>Ciudadanía Digital</span>
-                                </button>
-                            )}
+                            <button
+                                type="button"
+                                onClick={triggerCitizenshipModal}
+                                className="btn-arcade bg-white hover:bg-slate-50 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 border border-indigo-400/50 px-5 py-3.5 rounded-2xl font-bold font-display text-sm flex items-center gap-2 shadow-md"
+                            >
+                                <ShieldCheck size={18} className="text-cyan-500" />
+                                <span>Ciudadanía Digital</span>
+                            </button>
 
                             {!user && (
                                 <button
                                     type="button"
-                                    onClick={() => onOpenRegister && onOpenRegister()}
+                                    onClick={() => triggerRegisterModal('¡Regístrate como Explorador Escolar, gana +100 XP gratis y desbloquea todas las misiones!')}
                                     className="px-5 py-3 rounded-2xl bg-white dark:bg-slate-800 border-2 border-dashed border-purple-400/50 hover:border-purple-500 text-purple-600 dark:text-purple-300 font-bold text-sm transition-all"
                                 >
                                     ✨ Registro (+100 XP Gratis)
@@ -146,7 +145,7 @@ export default function Index({ lessons, activePoll, communityStats, leaderboard
                         <div className="transform hover:-translate-y-1 transition-transform duration-300">
                             <LivePolling
                                 poll={activePoll}
-                                onOpenRegister={(opt) => onOpenRegister && onOpenRegister(opt)}
+                                onOpenRegister={(opt) => triggerRegisterModal(opt)}
                             />
                         </div>
                     </div>
@@ -255,7 +254,7 @@ export default function Index({ lessons, activePoll, communityStats, leaderboard
                                             ) : (
                                                 <button
                                                     type="button"
-                                                    onClick={() => onOpenRegister && onOpenRegister(`¡Regístrate como Explorador Escolar para ingresar a la ${isMission0 ? 'Misión 00' : `Isla 0${lesson.island_number}`} y acumular tus puntos XP!`)}
+                                                    onClick={() => triggerRegisterModal(`¡Regístrate como Explorador Escolar para ingresar a la ${isMission0 ? 'Misión 00' : `Isla 0${lesson.island_number}`} y acumular tus puntos XP!`)}
                                                     className={`btn-arcade px-4 py-2 rounded-xl text-xs font-bold text-white shadow-sm flex items-center gap-1.5 ${
                                                         isMission0 ? 'btn-arcade-cyan' : 'btn-arcade-purple'
                                                     }`}

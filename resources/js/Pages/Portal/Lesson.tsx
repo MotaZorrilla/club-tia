@@ -35,6 +35,7 @@ import {
     Crosshair,
 } from 'lucide-react';
 import { appUrl } from '../../lib/route';
+import { triggerRegisterModal, triggerCitizenshipModal } from '../../lib/authModal';
 
 interface LessonProps {
     lesson: Lesson;
@@ -683,9 +684,9 @@ export default function LessonPage({ lesson, allLessons, onOpenRegister, onOpenC
 
     // Auto-disparador de registro para visitantes en misiones interactivas
     useEffect(() => {
-        if (!user && onOpenRegister) {
+        if (!user) {
             const timer = setTimeout(() => {
-                onOpenRegister(
+                triggerRegisterModal(
                     `¡Bienvenido a la ${isMission0 ? 'Misión 00' : `Isla 0${lesson.island_number}`}! Regístrate para interactuar con los retos y guardar tus puntos XP.`
                 );
             }, 600);
@@ -705,7 +706,7 @@ export default function LessonPage({ lesson, allLessons, onOpenRegister, onOpenC
 
     const handleSelectQ1 = (idx: number) => {
         if (!user) {
-            if (onOpenRegister) onOpenRegister(`¡Regístrate como Explorador Escolar para responder los retos de la ${isMission0 ? 'Misión 00' : `Isla 0${lesson.island_number}`} y ganar combo XP!`);
+            triggerRegisterModal(`¡Regístrate como Explorador Escolar para responder los retos de la ${isMission0 ? 'Misión 00' : `Isla 0${lesson.island_number}`} y ganar combo XP!`);
             return;
         }
         if (answered1) return;
@@ -762,7 +763,7 @@ export default function LessonPage({ lesson, allLessons, onOpenRegister, onOpenC
 
     const handleClassify = (cat: string) => {
         if (!user) {
-            if (onOpenRegister) onOpenRegister('¡Regístrate como Explorador Escolar para clasificar datos en la red neuronal y ganar puntos!');
+            triggerRegisterModal('¡Regístrate como Explorador Escolar para clasificar datos en la red neuronal y ganar puntos!');
             return;
         }
         if (classified) return;
@@ -813,7 +814,7 @@ export default function LessonPage({ lesson, allLessons, onOpenRegister, onOpenC
 
     const handleSelectPromptOpt = (optId: string) => {
         if (!user) {
-            if (onOpenRegister) onOpenRegister('¡Regístrate como Explorador Escolar para ingresar al Taller de Prompts y ganar puntos!');
+            triggerRegisterModal('¡Regístrate como Explorador Escolar para ingresar al Taller de Prompts y ganar puntos!');
             return;
         }
         if (testedPrompt) return;
@@ -823,7 +824,7 @@ export default function LessonPage({ lesson, allLessons, onOpenRegister, onOpenC
 
     const handleExecutePromptSimulation = () => {
         if (!user) {
-            if (onOpenRegister) onOpenRegister('¡Regístrate como Explorador Escolar para probar prompts en la IA simulada y ganar puntos!');
+            triggerRegisterModal('¡Regístrate como Explorador Escolar para probar prompts en la IA simulada y ganar puntos!');
             return;
         }
         if (!selectedPromptOpt) return;
@@ -865,7 +866,7 @@ export default function LessonPage({ lesson, allLessons, onOpenRegister, onOpenC
 
     const toggleMasterTerm = (idx: number) => {
         if (!user) {
-            if (onOpenRegister) onOpenRegister('¡Regístrate como Explorador Escolar para marcar conceptos dominados en tu carnet escolar!');
+            triggerRegisterModal('¡Regístrate como Explorador Escolar para marcar conceptos dominados en tu carnet escolar!');
             return;
         }
         if (masteredTerms.includes(idx)) {
@@ -882,7 +883,7 @@ export default function LessonPage({ lesson, allLessons, onOpenRegister, onOpenC
 
     const handleCompleteMission = async () => {
         if (!user) {
-            if (onOpenRegister) onOpenRegister();
+            triggerRegisterModal('¡Regístrate como Explorador Escolar para guardar tu progreso de misión y ganar XP!');
             return;
         }
 
@@ -956,7 +957,7 @@ export default function LessonPage({ lesson, allLessons, onOpenRegister, onOpenC
                         ) : (
                             <button
                                 type="button"
-                                onClick={() => onOpenRegister && onOpenRegister(`¡Identifícate como Explorador Escolar para activar los minijuegos de la ${isMission0 ? 'Misión 00' : `Isla 0${lesson.island_number}`} y ganar tus medallas!`)}
+                                onClick={() => triggerRegisterModal(`¡Identifícate como Explorador Escolar para activar los minijuegos de la ${isMission0 ? 'Misión 00' : `Isla 0${lesson.island_number}`} y ganar tus medallas!`)}
                                 className="px-3 py-1 rounded-full text-xs font-mono font-bold bg-cyan-100 text-cyan-800 border-cyan-200 hover:bg-cyan-200 transition-colors border"
                             >
                                 Iniciar Sesión / Registro
@@ -981,7 +982,7 @@ export default function LessonPage({ lesson, allLessons, onOpenRegister, onOpenC
                         </div>
                         <button
                             type="button"
-                            onClick={() => onOpenRegister && onOpenRegister(`¡Identifícate como Explorador Escolar para activar los minijuegos de la ${isMission0 ? 'Misión 00' : `Isla 0${lesson.island_number}`} y ganar tus medallas!`)}
+                            onClick={() => triggerRegisterModal(`¡Identifícate como Explorador Escolar para activar los minijuegos de la ${isMission0 ? 'Misión 00' : `Isla 0${lesson.island_number}`} y ganar tus medallas!`)}
                             className="w-full sm:w-auto btn-arcade btn-arcade-amber px-6 py-2.5 rounded-2xl text-slate-950 font-bold font-display text-xs shrink-0 shadow-md"
                         >
                             <span>¡Registrarme (+100 XP Gratis)! 🚀</span>

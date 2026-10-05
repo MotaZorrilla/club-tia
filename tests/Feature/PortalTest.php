@@ -146,13 +146,13 @@ class PortalTest extends TestCase
         ]);
     }
 
-    public function test_dashboard_renders_login_for_unauthenticated_user(): void
+    public function test_dashboard_renders_login_for_unauthenticated_user_without_exposing_users(): void
     {
         $response = $this->get('/dashboard');
         $response->assertStatus(200);
         $response->assertInertia(fn (Assert $page) => $page
             ->component('Dashboard/Login')
-            ->has('users')
+            ->missing('users')
         );
     }
 

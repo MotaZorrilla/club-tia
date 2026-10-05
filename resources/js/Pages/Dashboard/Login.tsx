@@ -19,11 +19,11 @@ interface UserItem {
 }
 
 interface LoginProps {
-    users: UserItem[];
+    users?: UserItem[];
     onOpenRegister?: () => void;
 }
 
-export default function DashboardLogin({ users, onOpenRegister }: LoginProps) {
+export default function DashboardLogin({ users = [], onOpenRegister }: LoginProps) {
     const [loginInput, setLoginInput] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
@@ -33,9 +33,6 @@ export default function DashboardLogin({ users, onOpenRegister }: LoginProps) {
     // Register Modal state
     const [isRegisterOpen, setIsRegisterOpen] = useState(false);
     const [registerRole, setRegisterRole] = useState<'alumno' | 'colaborador'>('alumno');
-
-    const facilitador = users.find(u => u.role === 'facilitador');
-    const colaboradores = users.filter(u => u.role === 'colaborador');
 
     const handleTraditionalLogin = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -78,12 +75,6 @@ export default function DashboardLogin({ users, onOpenRegister }: LoginProps) {
         } finally {
             setLoading(false);
         }
-    };
-
-    const handleQuickFill = (user: UserItem, defaultPass: string = 'carmelo2026') => {
-        setLoginInput(user.name);
-        setPassword(defaultPass);
-        setError(null);
     };
 
     const openRegisterWithRole = (role: 'alumno' | 'colaborador') => {
@@ -247,82 +238,77 @@ export default function DashboardLogin({ users, onOpenRegister }: LoginProps) {
                         </div>
                     </div>
 
-                    {/* SIDE PANEL: QUICK ACCESS & DEMO HELPER (Right 5 cols) */}
+                    {/* SIDE PANEL: INSTITUTIONAL SECURITY & PRIVACY (Right 5 cols) */}
                     <div className="lg:col-span-5 space-y-6">
-                        {/* Facilitator Card */}
-                        {facilitador && (
-                            <div className="bg-gradient-to-br from-purple-50 to-indigo-50/60 dark:from-slate-800 dark:to-purple-950/30 rounded-3xl p-6 border border-purple-200 dark:border-purple-500/30 shadow-md space-y-4">
-                                <div className="flex items-center gap-3">
-                                    <span className="text-3xl">{facilitador.avatar_emoji}</span>
-                                    <div>
-                                        <h3 className="font-display font-bold text-base text-slate-900 dark:text-white">
-                                            {facilitador.name}
-                                        </h3>
-                                        <span className="text-xs text-purple-700 dark:text-purple-300 font-semibold">
-                                            Facilitador · Mentor Técnico
-                                        </span>
-                                    </div>
+                        {/* Security Assurance Card */}
+                        <div className="bg-gradient-to-br from-indigo-50/80 via-white to-purple-50/60 dark:from-slate-800 dark:via-slate-850 dark:to-purple-950/30 rounded-3xl p-6 border-2 border-indigo-500/30 shadow-lg space-y-4">
+                            <div className="flex items-center justify-between">
+                                <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-2xl shadow-inner">
+                                    <ShieldCheck size={26} />
                                 </div>
-                                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-                                    Acceso a la consola de administración escolar, telemetría de misiones, asignación de méritos (+XP) y control del Live Polling.
-                                </p>
-                                <button
-                                    type="button"
-                                    onClick={() => handleQuickFill(facilitador)}
-                                    className="w-full py-2.5 px-4 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition-colors"
-                                >
-                                    <ShieldCheck size={16} />
-                                    <span>Autocompletar como Facilitador</span>
-                                </button>
-                            </div>
-                        )}
-
-                        {/* Co-teachers / Coordination */}
-                        {colaboradores.length > 0 && (
-                            <div className="bg-white dark:bg-slate-800 rounded-3xl p-6 border border-slate-200 dark:border-slate-700 shadow-md space-y-3">
-                                <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 block">
-                                    Acompañamiento Docente
+                                <span className="text-[10px] font-black uppercase px-2.5 py-1 rounded-full bg-indigo-100 text-indigo-700 dark:bg-indigo-900/50 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">
+                                    🛡️ Privacidad Garantizada
                                 </span>
-                                {colaboradores.map((colab) => (
-                                    <div
-                                        key={colab.id}
-                                        className="flex items-center justify-between p-3 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 gap-2"
-                                    >
-                                        <div className="flex items-center gap-2.5 truncate">
-                                            <span className="text-xl">{colab.avatar_emoji}</span>
-                                            <div className="truncate">
-                                                <span className="font-bold text-xs text-slate-900 dark:text-white block truncate">
-                                                    {colab.name}
-                                                </span>
-                                                <span className="text-[10px] text-slate-500 dark:text-slate-400">
-                                                    {colab.specialty || colab.grade}
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <button
-                                            type="button"
-                                            onClick={() => handleQuickFill(colab)}
-                                            className="px-2.5 py-1.5 rounded-lg bg-slate-200 dark:bg-slate-800 hover:bg-purple-100 dark:hover:bg-purple-950 text-slate-700 dark:text-slate-300 hover:text-purple-700 dark:hover:text-purple-300 text-[11px] font-bold shrink-0 transition-colors"
-                                        >
-                                            Cargar
-                                        </button>
-                                    </div>
-                                ))}
                             </div>
-                        )}
 
-                        {/* Security Info Card */}
-                        <div className="p-5 rounded-3xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-400 space-y-2">
-                            <span className="font-bold text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
-                                <span>🔒</span>
-                                <span>Entorno de Aprendizaje Monte Carmelo</span>
-                            </span>
-                            <p className="text-[11px] leading-relaxed">
-                                Cada estudiante cuenta con su propio perfil individual. Tus logros, medallas obtenidas en las 5 islas y votos se guardan de forma permanente.
+                            <div>
+                                <h3 className="font-display font-bold text-base text-slate-900 dark:text-white">
+                                    Identidad Escolar & Privacidad
+                                </h3>
+                                <p className="text-xs text-slate-600 dark:text-slate-300 mt-1 leading-relaxed">
+                                    El Colegio Monte Carmelo protege la privacidad de sus estudiantes bajo el Eje Transversal de Ciudadanía Digital. Las credenciales son personales e intransferibles.
+                                </p>
+                            </div>
+
+                            <div className="space-y-2 pt-2 border-t border-slate-100 dark:border-slate-700/60 text-xs">
+                                <div className="flex items-start gap-2 text-slate-600 dark:text-slate-300">
+                                    <span className="text-indigo-500 shrink-0 font-bold">✓</span>
+                                    <span><strong>Cuentas individuales:</strong> Cada explorador acumula XP, medallas y carnet propio de forma segura.</span>
+                                </div>
+                                <div className="flex items-start gap-2 text-slate-600 dark:text-slate-300">
+                                    <span className="text-indigo-500 shrink-0 font-bold">✓</span>
+                                    <span><strong>Cifrado criptográfico:</strong> Contraseñas resguardadas con algoritmos seguros (Argon2 / Bcrypt).</span>
+                                </div>
+                                <div className="flex items-start gap-2 text-slate-600 dark:text-slate-300">
+                                    <span className="text-indigo-500 shrink-0 font-bold">✓</span>
+                                    <span><strong>Trazabilidad formativa:</strong> Avance curricular conforme a la metodología ERCA.</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Lab Support & Assistance Card */}
+                        <div className="bg-white dark:bg-slate-800 rounded-3xl p-6 border border-slate-200 dark:border-slate-700 shadow-md space-y-4">
+                            <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center text-xl">
+                                    <School size={20} />
+                                </div>
+                                <div>
+                                    <h4 className="font-display font-bold text-sm text-slate-900 dark:text-white">
+                                        Mesa de Ayuda del Club T.I.A.
+                                    </h4>
+                                    <span className="text-[11px] text-slate-500 dark:text-slate-400">
+                                        Soporte Técnico en el Aula
+                                    </span>
+                                </div>
+                            </div>
+
+                            <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                                Si olvidaste tu contraseña o necesitas vincular tu carnet escolar, acércate al facilitador técnico en las sesiones presenciales:
                             </p>
-                            <p className="text-[11px] font-mono text-purple-600 dark:text-purple-400">
-                                💡 Clave predeterminada de prueba: <strong>carmelo2026</strong>
-                            </p>
+
+                            <div className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-semibold text-purple-700 dark:text-purple-300 flex items-center gap-2">
+                                <span>📅</span>
+                                <span>Martes, Miércoles y Jueves · Aula Técnica</span>
+                            </div>
+
+                            <button
+                                type="button"
+                                onClick={() => openRegisterWithRole('alumno')}
+                                className="w-full py-2.5 px-4 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition-colors"
+                            >
+                                <UserPlus size={16} />
+                                <span>Crear Nueva Cuenta de Explorador (+100 XP)</span>
+                            </button>
                         </div>
                     </div>
                 </div>

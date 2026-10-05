@@ -19,24 +19,7 @@ class DashboardController extends Controller
         $user = $userId ? User::find($userId) : null;
 
         if (!$user) {
-            $registeredUsers = User::orderByDesc('xp_points')->get()->map(function ($u) {
-                return [
-                    'id' => $u->id,
-                    'name' => $u->name,
-                    'role' => $u->role,
-                    'grade' => $u->grade,
-                    'section' => $u->section,
-                    'specialty' => $u->specialty,
-                    'avatar_emoji' => $u->getAvatarEmoji(),
-                    'xp_points' => $u->xp_points,
-                    'level' => $u->level,
-                    'rank' => $u->rank,
-                ];
-            });
-
-            return Inertia::render('Dashboard/Login', [
-                'users' => $registeredUsers,
-            ]);
+            return Inertia::render('Dashboard/Login');
         }
 
         $allUsers = User::orderByDesc('xp_points')->get()->map(function ($u) {
